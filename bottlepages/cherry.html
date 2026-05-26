@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Cherry - Store</title>
+        <link rel="stylesheet" href="../style.css">
+        <style>
+            .detail-page {
+                padding: 40px 24px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .detail-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 60px;
+                align-items: start;
+                margin: 40px 0;
+            }
+
+            .detail-image {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .detail-image img {
+                max-width: 100%;
+                height: auto;
+                max-height: 600px;
+                object-fit: contain;
+            }
+
+            .detail-content h2 {
+                font-size: 2.8rem;
+                color: #1b4f39;
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .detail-label {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: #195a43;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .detail-price {
+                font-size: 1.8rem;
+                color: #c21f1f;
+                font-weight: 700;
+                margin-bottom: 24px;
+            }
+
+            .detail-description {
+                font-size: 1.1rem;
+                line-height: 1.8;
+                color: #333;
+                margin-bottom: 32px;
+            }
+
+            .detail-buttons {
+                display: flex;
+                gap: 16px;
+                margin-bottom: 40px;
+                flex-wrap: wrap;
+            }
+
+            .btn-primary {
+                background: #c21f1f;
+                color: white;
+                border: none;
+                padding: 14px 32px;
+                border-radius: 24px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background 220ms ease, transform 220ms ease;
+            }
+
+            .btn-primary:hover {
+                background: #a01a1a;
+                transform: scale(1.05);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                color: #1b4f39;
+                border: 2px solid #1b4f39;
+                padding: 12px 28px;
+                border-radius: 24px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: all 220ms ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+            }
+
+            .btn-secondary:hover {
+                background: #1b4f39;
+                color: white;
+            }
+
+            .nav-bottles {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 16px;
+                margin-top: 60px;
+                padding-top: 40px;
+                border-top: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .nav-bottle-card {
+                background: rgba(255,255,255,0.95);
+                border-radius: 12px;
+                padding: 16px;
+                text-align: center;
+                cursor: pointer;
+                transition: all 220ms ease;
+                border: 2px solid transparent;
+                text-decoration: none;
+                color: inherit;
+            }
+
+            .nav-bottle-card:hover {
+                transform: translateY(-4px);
+                border-color: #c21f1f;
+                box-shadow: 0 8px 20px rgba(194,31,31,0.15);
+            }
+
+            .nav-bottle-card img {
+                max-height: 120px;
+                width: auto;
+                margin-bottom: 8px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .nav-bottle-card p {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #1b4f39;
+                margin: 0;
+            }
+
+            @media (max-width: 900px) {
+                .detail-container {
+                    grid-template-columns: 1fr;
+                    gap: 40px;
+                }
+
+                .detail-content h2 {
+                    font-size: 2.2rem;
+                }
+
+                .detail-buttons {
+                    flex-direction: column;
+                }
+
+                .btn-primary, .btn-secondary {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="../images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="../images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Shop Ale-8 One</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="../index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="../about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="../merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="../merch.html#apparel">Apparel</a>
+                            <a href="../merch.html#drinkware">Drinkware</a>
+                            <a href="../merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="../merch.html#prints">Prints</a>
+                            <a href="../merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="../recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="../store.html" role="tab" class="tab active" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="detail-page">
+                <div class="detail-container">
+                    <div class="detail-image">
+                        <img src="../images/cherry.png" alt="Ale-8 One Cherry">
+                    </div>
+                    <div class="detail-content">
+                        <p class="detail-label">Ale-8 One Cherry</p>
+                        <h2>Cherry</h2>
+                        <p class="detail-price">$2.99</p>
+                        <p class="detail-description">
+                            A smooth Cherry infusion with the same spice-forward sweetness of Original, delivering a rich cherry soda with the classic Ale-8 bite. Real cherry flavor meets bold ginger — a combination that's both familiar and unmistakably Ale-8.
+                        </p>
+                        <div class="detail-buttons">
+                            <button class="btn-primary" onclick="addToCart('Cherry')">Add to Cart</button>
+                            <a href="../store.html" class="btn-secondary">Back to Store</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; margin-top: 60px; margin-bottom: 30px; font-size: 1.5rem; color: #1b4f39;">Other Flavors</h3>
+                <div class="nav-bottles">
+                    <a href="original.html" class="nav-bottle-card">
+                        <img src="../images/Orginal.png" alt="Original">
+                        <p>Original</p>
+                    </a>
+                    <a href="orangecream.html" class="nav-bottle-card">
+                        <img src="../images/orangecream.png" alt="Orange Cream">
+                        <p>Orange Cream</p>
+                    </a>
+                    <a href="blackcherry.html" class="nav-bottle-card">
+                        <img src="../images/blackcherry.png" alt="Black Cherry">
+                        <p>Black Cherry</p>
+                    </a>
+                    <a href="zerosugar.html" class="nav-bottle-card">
+                        <img src="../images/zerosugar.png" alt="Zero Sugar">
+                        <p>Zero Sugar</p>
+                    </a>
+                    <a href="cherryzero.html" class="nav-bottle-card">
+                        <img src="../images/cherryzero.png" alt="Cherry Zero">
+                        <p>Cherry Zero</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            function addToCart(flavor) {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Added!';
+                btn.style.background = '#195a43';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }
+        </script>
+    </body>
+</html>
