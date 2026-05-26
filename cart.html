@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 One — Your Cart</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            .cart-page {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 40px 24px 80px;
+            }
+
+            /* ── Section header ── */
+            .cart-section-head {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                border-bottom: 3px solid #c21f1f;
+                padding-bottom: 14px;
+                margin-bottom: 28px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .cart-section-head h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.4rem, 3vw, 1.9rem);
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0;
+            }
+
+            .clear-cart-btn {
+                font-size: 0.78rem;
+                color: #888;
+                background: none;
+                border: none;
+                cursor: pointer;
+                text-decoration: underline;
+                font-family: 'Segoe UI', sans-serif;
+                padding: 0;
+            }
+
+            .clear-cart-btn:hover { color: #c21f1f; }
+
+            /* ── Layout ── */
+            .cart-layout {
+                display: grid;
+                grid-template-columns: 1fr 340px;
+                gap: 32px;
+                align-items: start;
+            }
+
+            /* ── Cart item row ── */
+            .cart-item {
+                display: flex;
+                align-items: center;
+                gap: 18px;
+                background: #ffffff;
+                border-radius: 14px;
+                padding: 16px 18px;
+                box-shadow: 0 4px 14px rgba(17,24,34,0.07);
+                border: 1px solid rgba(0,0,0,0.04);
+                margin-bottom: 14px;
+            }
+
+            .cart-item-img {
+                width: 72px;
+                height: 72px;
+                object-fit: contain;
+                border-radius: 10px;
+                background: #f0f7f4;
+                flex-shrink: 0;
+                padding: 6px;
+            }
+
+            .cart-item-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .cart-item-label {
+                font-size: 0.68rem;
+                text-transform: uppercase;
+                letter-spacing: 0.14em;
+                color: #195a43;
+                font-weight: 700;
+                margin: 0 0 3px;
+            }
+
+            .cart-item-name {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.95rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: #1b4f39;
+                margin: 0 0 2px;
+            }
+
+            .cart-item-note {
+                font-size: 0.72rem;
+                color: #888;
+                margin: 2px 0 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .cart-item-unit {
+                font-size: 0.78rem;
+                color: #666;
+                margin: 4px 0 0;
+            }
+
+            /* ── Qty controls ── */
+            .cart-qty {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+
+            .cart-qty-btn {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                border: 2px solid #dde8e4;
+                background: #fff;
+                color: #1b4f39;
+                font-size: 1rem;
+                line-height: 1;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: border-color 160ms, background 160ms;
+                font-weight: 700;
+            }
+
+            .cart-qty-btn:hover { border-color: #1b4f39; background: #f0f7f4; }
+            .cart-qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+            .cart-qty-num {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1b4f39;
+                min-width: 22px;
+                text-align: center;
+            }
+
+            /* ── Line total ── */
+            .cart-item-total {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1b4f39;
+                min-width: 60px;
+                text-align: right;
+                flex-shrink: 0;
+            }
+
+            /* ── Remove button ── */
+            .cart-remove-btn {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                border: none;
+                background: rgba(194,31,31,0.08);
+                color: #c21f1f;
+                font-size: 0.85rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 160ms;
+                flex-shrink: 0;
+            }
+
+            .cart-remove-btn:hover { background: #c21f1f; color: #fff; }
+
+            /* ── Order summary box ── */
+            .order-summary {
+                background: #ffffff;
+                border-radius: 18px;
+                box-shadow: 0 8px 28px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.04);
+                overflow: hidden;
+                position: sticky;
+                top: 24px;
+            }
+
+            .summary-head {
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+                padding: 20px 24px;
+            }
+
+            .summary-head h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #ffffff;
+                margin: 0;
+            }
+
+            .summary-body {
+                padding: 20px 24px;
+            }
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                font-size: 0.9rem;
+                color: #555;
+                margin-bottom: 10px;
+            }
+
+            .summary-row.total {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: #1b4f39;
+                border-top: 2px solid #e8ede9;
+                padding-top: 12px;
+                margin-top: 4px;
+            }
+
+            .summary-note {
+                font-size: 0.74rem;
+                color: #999;
+                margin: 12px 0 20px;
+                line-height: 1.5;
+            }
+
+            .checkout-btn {
+                width: 100%;
+                padding: 14px;
+                background: #c21f1f;
+                color: #fff;
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: background 200ms, transform 200ms;
+                margin-bottom: 12px;
+            }
+
+            .checkout-btn:hover { background: #8f1414; transform: translateY(-1px); }
+
+            .continue-links {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .continue-links a {
+                display: block;
+                text-align: center;
+                font-size: 0.8rem;
+                color: #195a43;
+                text-decoration: none;
+                padding: 8px;
+                border-radius: 8px;
+                border: 1px solid #dde8e4;
+                transition: background 160ms;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+
+            .continue-links a:hover { background: #f0f7f4; }
+
+            /* ── Empty cart ── */
+            .empty-cart {
+                text-align: center;
+                padding: 72px 24px;
+            }
+
+            .empty-icon {
+                font-size: 4rem;
+                margin-bottom: 20px;
+            }
+
+            .empty-cart h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.8rem;
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 12px;
+            }
+
+            .empty-cart p {
+                font-size: 1rem;
+                color: #777;
+                margin: 0 0 32px;
+            }
+
+            .empty-btns {
+                display: flex;
+                gap: 14px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .empty-btns a {
+                padding: 13px 28px;
+                border-radius: 999px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                text-decoration: none;
+                transition: background 200ms, transform 200ms;
+            }
+
+            .empty-btns a:first-child { background: #1b4f39; color: #fff; }
+            .empty-btns a:last-child  { background: #c21f1f; color: #fff; }
+            .empty-btns a:hover { transform: translateY(-2px); filter: brightness(0.9); }
+
+            /* ── Checkout form overlay ── */
+            .checkout-form-wrap {
+                display: none;
+                background: #ffffff;
+                border-radius: 18px;
+                box-shadow: 0 8px 28px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.04);
+                overflow: hidden;
+                margin-top: 28px;
+            }
+
+            .checkout-form-wrap.open { display: block; }
+
+            .checkout-form-head {
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+                padding: 24px 32px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .checkout-form-head h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: #ffffff;
+                margin: 0;
+                flex: 1;
+            }
+
+            .back-btn {
+                background: rgba(255,255,255,0.15);
+                border: 1px solid rgba(255,255,255,0.3);
+                color: #fff;
+                padding: 7px 16px;
+                border-radius: 999px;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.78rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                cursor: pointer;
+                transition: background 160ms;
+            }
+
+            .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+            .checkout-form-body { padding: 28px 32px; }
+
+            .cf-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin-bottom: 16px;
+            }
+
+            .cf-group {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .cf-group.full { grid-column: 1 / -1; }
+
+            .cf-group label {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.72rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                color: #1b4f39;
+            }
+
+            .cf-group input,
+            .cf-group textarea {
+                padding: 10px 13px;
+                border: 2px solid rgba(0,0,0,0.1);
+                border-radius: 9px;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 0.93rem;
+                background: #f7f6f2;
+                color: #1f2d2b;
+                outline: none;
+                transition: border-color 160ms;
+            }
+
+            .cf-group input:focus,
+            .cf-group textarea:focus { border-color: #1b4f39; background: #fff; }
+
+            .cf-group input.cf-error { border-color: #c21f1f; }
+
+            .cf-err-msg {
+                font-size: 0.72rem;
+                color: #c21f1f;
+                min-height: 1em;
+            }
+
+            .cf-group textarea { resize: vertical; min-height: 80px; }
+
+            .order-mini {
+                background: #f7f6f2;
+                border-radius: 10px;
+                padding: 14px 16px;
+                margin-bottom: 20px;
+                font-size: 0.82rem;
+                color: #444;
+                line-height: 1.7;
+            }
+
+            .order-mini strong { color: #1b4f39; }
+
+            .place-order-btn {
+                width: 100%;
+                padding: 14px;
+                background: #c21f1f;
+                color: #fff;
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: background 200ms;
+                margin-top: 20px;
+            }
+
+            .place-order-btn:hover { background: #8f1414; }
+
+            /* ── Order confirmation ── */
+            .order-confirmed {
+                display: none;
+                text-align: center;
+                padding: 56px 24px;
+            }
+
+            .order-confirmed.show { display: block; }
+
+            .confirmed-icon {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1b4f39, #143d2c);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.2rem;
+                margin: 0 auto 22px;
+            }
+
+            .order-confirmed h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.8rem;
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 12px;
+            }
+
+            .order-confirmed p {
+                font-size: 0.95rem;
+                color: #555;
+                line-height: 1.7;
+                max-width: 480px;
+                margin: 0 auto 28px;
+            }
+
+            /* ── Responsive ── */
+            @media (max-width: 820px) {
+                .cart-layout { grid-template-columns: 1fr; }
+                .order-summary { position: static; }
+            }
+
+            @media (max-width: 560px) {
+                .cart-page { padding: 24px 16px 60px; }
+                .cart-item { gap: 12px; padding: 13px; }
+                .cart-item-img { width: 56px; height: 56px; }
+                .cf-row { grid-template-columns: 1fr; }
+                .checkout-form-body { padding: 20px; }
+                .checkout-form-head { padding: 18px 20px; }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Your Cart</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="cart-page">
+
+                <!-- Empty state -->
+                <div class="empty-cart" id="emptyCart" style="display:none">
+                    <div class="empty-icon">🛒</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Browse merchandise or order bottles to get started.</p>
+                    <div class="empty-btns">
+                        <a href="merch.html">Shop Merchandise</a>
+                        <a href="store.html">Order Bottles</a>
+                    </div>
+                </div>
+
+                <!-- Cart with items -->
+                <div id="cartFull" style="display:none">
+                    <div class="cart-section-head">
+                        <h2 id="cartHeading">Your Cart</h2>
+                        <button class="clear-cart-btn" id="clearCartBtn">Clear cart</button>
+                    </div>
+
+                    <div class="cart-layout">
+                        <!-- Items column -->
+                        <div>
+                            <div id="cartItemsList"></div>
+                        </div>
+
+                        <!-- Summary column -->
+                        <div>
+                            <div class="order-summary">
+                                <div class="summary-head">
+                                    <h3>Order Summary</h3>
+                                </div>
+                                <div class="summary-body">
+                                    <div class="summary-row">
+                                        <span id="summaryItemCount">0 items</span>
+                                        <span id="summarySubtotal">$0.00</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Shipping</span>
+                                        <span>Calculated at checkout</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Estimated Total</span>
+                                        <span id="summaryTotal">$0.00</span>
+                                    </div>
+                                    <p class="summary-note">Prices are estimates. Final total confirmed at checkout.</p>
+                                    <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+                                    <div class="continue-links">
+                                        <a href="merch.html">Browse Merchandise</a>
+                                        <a href="store.html">Order More Bottles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkout form (hidden until "Proceed to Checkout") -->
+                    <div class="checkout-form-wrap" id="checkoutFormWrap">
+                        <div class="checkout-form-head">
+                            <h3>Complete Your Order</h3>
+                            <button class="back-btn" id="backToCartBtn">← Back to Cart</button>
+                        </div>
+                        <div class="checkout-form-body">
+                            <div class="order-mini" id="orderMini"></div>
+                            <form id="checkoutForm" novalidate>
+                                <div class="cf-row">
+                                    <div class="cf-group">
+                                        <label for="cfFirst">First Name *</label>
+                                        <input type="text" id="cfFirst" autocomplete="given-name" placeholder="Jane">
+                                        <p class="cf-err-msg" id="cfFirstErr"></p>
+                                    </div>
+                                    <div class="cf-group">
+                                        <label for="cfLast">Last Name *</label>
+                                        <input type="text" id="cfLast" autocomplete="family-name" placeholder="Smith">
+                                        <p class="cf-err-msg" id="cfLastErr"></p>
+                                    </div>
+                                </div>
+                                <div class="cf-row">
+                                    <div class="cf-group">
+                                        <label for="cfEmail">Email *</label>
+                                        <input type="email" id="cfEmail" autocomplete="email" placeholder="jane@example.com">
+                                        <p class="cf-err-msg" id="cfEmailErr"></p>
+                                    </div>
+                                    <div class="cf-group">
+                                        <label for="cfPhone">Phone</label>
+                                        <input type="tel" id="cfPhone" autocomplete="tel" placeholder="(555) 123-4567">
+                                        <p class="cf-err-msg"></p>
+                                    </div>
+                                </div>
+                                <div class="cf-row">
+                                    <div class="cf-group full">
+                                        <label for="cfAddress">Shipping Address *</label>
+                                        <input type="text" id="cfAddress" autocomplete="street-address" placeholder="123 Main St, Winchester, KY 40391">
+                                        <p class="cf-err-msg" id="cfAddressErr"></p>
+                                    </div>
+                                </div>
+                                <div class="cf-row">
+                                    <div class="cf-group full">
+                                        <label for="cfNotes">Order Notes</label>
+                                        <textarea id="cfNotes" placeholder="Any special instructions…"></textarea>
+                                    </div>
+                                </div>
+                                <button type="submit" class="place-order-btn">Place Order via Email</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order confirmed -->
+                <div class="order-confirmed" id="orderConfirmed">
+                    <div class="confirmed-icon">✓</div>
+                    <h3>Order Sent!</h3>
+                    <p>Your order details have been sent to our team via email. We'll confirm your order and follow up with shipping info within one business day.</p>
+                    <div class="empty-btns">
+                        <a href="merch.html">Shop More Merchandise</a>
+                        <a href="store.html">Order More Bottles</a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <script src="cart.js"></script>
+        <script>
+            // Tab toggle
+            document.querySelectorAll('.tab').forEach(t => {
+                t.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            const $ = id => document.getElementById(id);
+
+            function fmt(n) { return '$' + n.toFixed(2); }
+
+            function renderCart() {
+                const cart = Cart.getCart();
+                const count = Cart.getCount();
+                const total = Cart.getTotal();
+
+                if (cart.length === 0) {
+                    $('emptyCart').style.display = '';
+                    $('cartFull').style.display = 'none';
+                    $('orderConfirmed').classList.remove('show');
+                    return;
+                }
+
+                $('emptyCart').style.display = 'none';
+                $('cartFull').style.display = '';
+
+                // Heading
+                $('cartHeading').textContent = `Your Cart (${count} item${count === 1 ? '' : 's'})`;
+
+                // Summary
+                $('summaryItemCount').textContent = `${count} item${count === 1 ? '' : 's'}`;
+                $('summarySubtotal').textContent = fmt(total);
+                $('summaryTotal').textContent = fmt(total);
+
+                // Item rows
+                const list = $('cartItemsList');
+                list.innerHTML = '';
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'cart-item';
+                    row.dataset.id = item.id;
+                    row.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img"
+                             onerror="this.src='images/ale8logo.png'">
+                        <div class="cart-item-info">
+                            <p class="cart-item-label">${item.label}</p>
+                            <p class="cart-item-name">${item.name}</p>
+                            ${item.note ? `<p class="cart-item-note">${item.note}</p>` : ''}
+                            <p class="cart-item-unit">${fmt(item.price)} each</p>
+                        </div>
+                        <div class="cart-qty">
+                            <button class="cart-qty-btn dec-btn" aria-label="Decrease quantity" ${item.qty <= 1 ? 'disabled' : ''}>−</button>
+                            <span class="cart-qty-num">${item.qty}</span>
+                            <button class="cart-qty-btn inc-btn" aria-label="Increase quantity">+</button>
+                        </div>
+                        <div class="cart-item-total">${fmt(item.price * item.qty)}</div>
+                        <button class="cart-remove-btn" aria-label="Remove ${item.name}">✕</button>
+                    `;
+                    row.querySelector('.dec-btn').addEventListener('click', () => {
+                        Cart.updateQty(item.id, item.qty - 1);
+                        renderCart();
+                    });
+                    row.querySelector('.inc-btn').addEventListener('click', () => {
+                        Cart.updateQty(item.id, item.qty + 1);
+                        renderCart();
+                    });
+                    row.querySelector('.cart-remove-btn').addEventListener('click', () => {
+                        Cart.removeItem(item.id);
+                        renderCart();
+                    });
+                    list.appendChild(row);
+                });
+            }
+
+            $('clearCartBtn').addEventListener('click', () => {
+                if (confirm('Remove all items from your cart?')) {
+                    Cart.clearCart();
+                    renderCart();
+                }
+            });
+
+            $('checkoutBtn').addEventListener('click', () => {
+                // Build order mini-summary
+                const cart = Cart.getCart();
+                const lines = cart.map(i =>
+                    `<strong>${i.name}</strong> × ${i.qty} — ${fmt(i.price * i.qty)}${i.note ? ` <em>(${i.note})</em>` : ''}`
+                ).join('<br>');
+                $('orderMini').innerHTML = lines + `<br><strong>Total: ${fmt(Cart.getTotal())}</strong>`;
+                $('checkoutFormWrap').classList.add('open');
+                $('checkoutFormWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            $('backToCartBtn').addEventListener('click', () => {
+                $('checkoutFormWrap').classList.remove('open');
+            });
+
+            // Form validation
+            function setErr(inputId, errId, msg) {
+                const el = $(inputId);
+                const err = $(errId);
+                if (msg) { el.classList.add('cf-error'); err.textContent = msg; }
+                else      { el.classList.remove('cf-error'); err.textContent = ''; }
+            }
+
+            $('checkoutForm').addEventListener('submit', e => {
+                e.preventDefault();
+                let valid = true;
+
+                const first   = $('cfFirst').value.trim();
+                const last    = $('cfLast').value.trim();
+                const email   = $('cfEmail').value.trim();
+                const address = $('cfAddress').value.trim();
+                const phone   = $('cfPhone').value.trim();
+                const notes   = $('cfNotes').value.trim();
+
+                if (!first)  { setErr('cfFirst',   'cfFirstErr',   'Required.'); valid = false; }
+                else           setErr('cfFirst',   'cfFirstErr',   '');
+                if (!last)   { setErr('cfLast',    'cfLastErr',    'Required.'); valid = false; }
+                else           setErr('cfLast',    'cfLastErr',    '');
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    setErr('cfEmail', 'cfEmailErr', 'Valid email required.'); valid = false;
+                } else setErr('cfEmail', 'cfEmailErr', '');
+                if (!address){ setErr('cfAddress', 'cfAddressErr', 'Required.'); valid = false; }
+                else           setErr('cfAddress', 'cfAddressErr', '');
+
+                if (!valid) return;
+
+                // Build email body
+                const cart = Cart.getCart();
+                const itemLines = cart.map(i =>
+                    `  - ${i.name}${i.note ? ` (${i.note})` : ''}: ${i.qty} × $${i.price.toFixed(2)} = $${(i.price * i.qty).toFixed(2)}`
+                ).join('\n');
+
+                const subject = encodeURIComponent(`Ale-8 Order — ${first} ${last}`);
+                const body = encodeURIComponent(
+                    `ALE-8 ONE ORDER\n===============\n\n` +
+                    `Customer:  ${first} ${last}\n` +
+                    `Email:     ${email}\n` +
+                    `Phone:     ${phone || 'Not provided'}\n` +
+                    `Address:   ${address}\n\n` +
+                    `ITEMS:\n${itemLines}\n\n` +
+                    `TOTAL: $${Cart.getTotal().toFixed(2)}\n\n` +
+                    `Notes: ${notes || 'None'}\n`
+                );
+
+                window.location.href = `mailto:info@ale8one.com?subject=${subject}&body=${body}`;
+
+                // Show confirmation after brief delay
+                setTimeout(() => {
+                    Cart.clearCart();
+                    $('cartFull').style.display = 'none';
+                    $('orderConfirmed').classList.add('show');
+                    $('orderConfirmed').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            });
+
+            // Clear errors on input
+            [['cfFirst','cfFirstErr'],['cfLast','cfLastErr'],['cfEmail','cfEmailErr'],['cfAddress','cfAddressErr']].forEach(([id, err]) => {
+                $(id).addEventListener('input', () => setErr(id, err, ''));
+            });
+
+            renderCart();
+        </script>
+    </body>
+</html>

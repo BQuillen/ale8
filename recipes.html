@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Recipes</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            .recipes-page {
+                padding: 0 0 80px;
+            }
+
+            /* ── Page intro ── */
+            .recipes-intro {
+                text-align: center;
+                padding: 52px 24px 40px;
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+            }
+
+            .recipes-intro h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.8rem, 4vw, 2.8rem);
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 10px;
+            }
+
+            .recipes-intro p {
+                font-size: 1.05rem;
+                color: rgba(255,255,255,0.75);
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            /* ── Section wrapper ── */
+            .recipe-section {
+                padding: 56px 24px 0;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            /* ── Section header ── */
+            .section-header {
+                display: flex;
+                align-items: baseline;
+                gap: 18px;
+                margin-bottom: 32px;
+                border-bottom: 3px solid #c21f1f;
+                padding-bottom: 14px;
+            }
+
+            .section-header h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.5rem, 3vw, 2rem);
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin: 0;
+            }
+
+            .section-count {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.88rem;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                color: #c21f1f;
+                text-transform: uppercase;
+            }
+
+            .header-links a {
+                font-size: 1.1rem;
+                letter-spacing: 0.14em;
+                color: #195a43;
+                text-decoration: none;
+            }
+
+            /* ── 4-column grid ── */
+            .recipes-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 22px;
+            }
+
+            /* ── Card ── */
+            .recipe-card {
+                background: #ffffff;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 6px 20px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+                transition: transform 280ms ease, box-shadow 280ms ease;
+                cursor: pointer;
+            }
+
+            .recipe-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 18px 40px rgba(17,24,34,0.15);
+            }
+
+            .section-links {
+                display: flex;
+                justify-content: center;
+                gap: 18px;
+                flex-wrap: wrap;
+                margin: 0 auto 28px;
+                padding: 0 12px;
+                padding-top: 20px;
+            }
+
+            .section-links a {
+                display: inline-block;
+                padding: 10px 18px;
+                border-radius: 999px;
+                text-decoration: none;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                background: #c21f1f;
+                color: #ffffff;
+                transition: transform 180ms ease, background 180ms ease;
+            }
+
+            .section-links a:hover {
+                transform: translateY(-2px);
+                background: #8f1414;
+            }
+
+            /* ── Media area ── */
+            .recipe-media {
+                position: relative;
+                height: 240px;
+                background: linear-gradient(150deg, #1b4f39 0%, #143d2c 100%);
+                overflow: hidden;
+            }
+
+            .recipe-media.food-bg {
+                background: linear-gradient(150deg, #3a1a00 0%, #5c2d00 100%);
+            }
+
+            .recipe-img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                padding: 22px;
+                display: block;
+                transition: filter 320ms ease;
+            }
+
+            .recipe-card:hover .recipe-img {
+                filter: brightness(0.3);
+            }
+
+            /* ── Hover overlay ── */
+            .recipe-overlay {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 18px;
+                opacity: 0;
+                transition: opacity 320ms ease;
+                background: rgba(17,24,34,0.82);
+            }
+
+            .recipe-card:hover .recipe-overlay {
+                opacity: 1;
+            }
+
+            .recipe-overlay-title {
+                margin: 0 0 10px;
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+            }
+
+            .recipe-details {
+                text-align: center;
+                color: #ffffff;
+                width: 100%;
+            }
+
+            .recipe-ingredients {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 10px;
+                font-size: 0.82rem;
+                line-height: 1.75;
+            }
+
+            .recipe-ingredients li {
+                color: rgba(255,255,255,0.92);
+            }
+
+            .recipe-ingredients li::before {
+                content: '· ';
+                color: #c21f1f;
+                font-weight: 700;
+            }
+
+            .recipe-method {
+                font-size: 0.78rem;
+                color: rgba(255,255,255,0.8);
+                font-style: italic;
+                margin: 0;
+                line-height: 1.5;
+                border-top: 1px solid rgba(255,255,255,0.22);
+                padding-top: 9px;
+            }
+
+            /* ── Name footer ── */
+            .recipe-footer {
+                padding: 13px 14px;
+                background: #ffffff;
+            }
+
+            .recipe-name {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.9rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: #1b4f39;
+                margin: 0;
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            .recipe-tag {
+                font-size: 0.67rem;
+                text-transform: uppercase;
+                letter-spacing: 0.14em;
+                color: #c21f1f;
+                font-weight: 700;
+                text-align: center;
+                display: block;
+                margin-top: 3px;
+            }
+
+            /* ── Responsive ── */
+            @media (max-width: 1100px) {
+                .recipes-grid { grid-template-columns: repeat(3, 1fr); }
+            }
+
+            @media (max-width: 768px) {
+                .recipes-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+                .recipe-media { height: 200px; }
+                .recipe-section { padding: 40px 16px 0; }
+            }
+
+            @media (max-width: 440px) {
+                .recipes-grid { grid-template-columns: 1fr; }
+            }
+
+            /* ── Copy toast ── */
+            #copy-toast {
+                position: fixed;
+                bottom: 32px;
+                left: 50%;
+                transform: translateX(-50%) translateY(16px);
+                background: #1b4f39;
+                color: #ffffff;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 10px 22px;
+                border-radius: 999px;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 220ms ease, transform 220ms ease;
+                z-index: 9999;
+            }
+
+            #copy-toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Ale-8 One Recipes</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab active" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="recipes-page">
+
+                <div class="recipes-intro">
+                    <h2>Mix It Up with Ale-8</h2>
+                    <p>Cocktails, mocktails, and food — hover any card to reveal the recipe.</p>
+                </div>
+                <div class="section-links">
+                    <a href="#cocktails">Cocktails</a>
+                    <a href="#mocktails">Mocktails</a>
+                    <a href="#food">Food</a>
+                </div>
+                <!-- ═══════════════════════════════════════
+                     SECTION 1 · COCKTAILS (35)
+                ═══════════════════════════════════════ -->
+                <div class="recipe-section" id="cocktails">
+                    <div class="section-header">
+                        <h2 id="cocktails">Cocktails</h2>
+                        <span class="section-count">35 Recipes</span>
+                    </div>
+                    <div class="recipes-grid">
+
+                        <!-- 1 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale8_kentucky_mule_500x500.jpg.avif" alt="Kentucky Mule" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz bourbon</li>
+                                        <li>Ale-8 simple syrup*</li>
+                                        <li>Juice of ½ lime</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">*Simple syrup: equal parts Ale-8 + sugar, simmer until reduced by half. Fill copper mug with cobbled ice, add all ingredients, stir gently.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Kentucky Mule</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 2 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cocktials_0000_burro-400x400-1.jpg.avif" alt="Bluegrass Burro" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz vodka</li>
+                                        <li>Ale-8 simple syrup*</li>
+                                        <li>Juice of ½ lime</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">*Equal parts Ale-8 + sugar, reduced by half. Fill copper mug with cobbled ice, add vodka, syrup, and lime. Top with Ale-8, garnish with lime slice.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Bluegrass Burro</h3>
+                                <span class="recipe-tag">Original · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 3 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/header_hot-toddy_ale-8_500x500-comp.jpg.avif" alt="Mint Julep" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz bourbon</li>
+                                        <li>Ale-8 simple syrup</li>
+                                        <li>Fresh mint leaves</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle mint leaves with Ale-8 simple syrup in a silver julep cup. Fill with crushed ice, add bourbon, top with Ale-8. Garnish with mint sprig.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Mint Julep</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 4 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/Ale-8-One-Perfect-Peach-Julep (1).jpg" alt="Perfect Peach Julep" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz bourbon</li>
+                                        <li>Ale-8 simple syrup</li>
+                                        <li>Fresh mint + peach slices</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle fresh mint and peach slices with Ale-8 simple syrup. Fill julep cup with crushed ice, add bourbon, top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Perfect Peach Julep</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 5 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/peachy_keen_500x500.jpg.avif" alt="Peachy Keen" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz Mezcal</li>
+                                        <li>½ oz Rose Liqueur</li>
+                                        <li>¾ oz lime juice · ½ oz pineapple juice</li>
+                                        <li>6 basil leaves · Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle 4 basil leaves in a Collins glass. Fill with ice and remaining basil. Add mezcal, rose liqueur, lime, and pineapple. Top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Peachy Keen</h3>
+                                <span class="recipe-tag">Original · Mezcal</span>
+                            </div>
+                        </div>
+
+                        <!-- 6 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale-easy-peasy.jpg.avif" alt="Easy Peasy Ale-8 Breezy" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz Maker's Mark Bourbon</li>
+                                        <li>½ oz Orange Curaçao</li>
+                                        <li>Squeeze of fresh orange</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">Build in an Old Fashioned glass over ice. Add bourbon, orange curaçao, and squeeze of fresh orange. Top with Ale-8 and stir.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Easy Peasy Ale-8 Breezy</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 7 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/the-botherum_500x500-comp.jpg.avif" alt="The Brotherum Old Fashioned" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Bourbon</li>
+                                        <li>Orange bitters + fresh OJ</li>
+                                        <li>Mixed fruit</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine bourbon, bitters, OJ, and mixed fruit in a pitcher. Refrigerate overnight. Pour over ice and top with Ale-8 just before serving.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Brotherum Old Fashioned</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 8 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cocktials_0005_commonwealth-400x400-1.jpg.avif" alt="The Commonwealth" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz Pimm's No. 1 Cup</li>
+                                        <li>Fresh mint leaves</li>
+                                        <li>Ale-8 Original to fill</li>
+                                        <li>Ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Fill a rocks or Collins glass with ice. Add Pimm's and fresh mint. Top with Ale-8 and stir gently.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Commonwealth</h3>
+                                <span class="recipe-tag">Original · Pimm's</span>
+                            </div>
+                        </div>
+
+                        <!-- 9 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale8_kentucky_mule_500x500.jpg.avif" alt="A Late Irish" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz Irish whiskey</li>
+                                        <li>Splash of grenadine</li>
+                                        <li>1 fresh orange slice</li>
+                                        <li>Ale-8 Original to fill</li>
+                                    </ul>
+                                    <p class="recipe-method">Fill glass with ice, add whiskey and grenadine. Squeeze and drop in the orange slice. Top with Ale-8 and stir.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">A Late Irish</h3>
+                                <span class="recipe-tag">Original · Irish Whiskey</span>
+                            </div>
+                        </div>
+
+                        <!-- 10 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/original_ale-8_ale-8_punch_500x500.jpg.avif" alt="Ale-8 Mojo" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Ale-8 Original to fill</li>
+                                        <li>1 fresh orange</li>
+                                        <li>Ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Fill a glass with ice and Ale-8. Squeeze in a fresh orange and stir gently. Garnish with orange wheel.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Ale-8 Mojo</h3>
+                                <span class="recipe-tag">Original · Non-Spirit</span>
+                            </div>
+                        </div>
+
+                        <!-- 11 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/You-Had-Me-at-Ale-8-Cocktail-400x400-1.jpg.avif" alt="You Had Me At Ale-8" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh raspberries (muddled)</li>
+                                        <li>Raspberry vodka</li>
+                                        <li>Cranberry-pomegranate juice</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle raspberries in glass. Add raspberry vodka and cranberry-pomegranate juice over ice. Top with Ale-8 and garnish with berries.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">You Had Me At Ale-8</h3>
+                                <span class="recipe-tag">Original · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 12 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cocktials_0006_category-8-400x400-1.jpg.avif" alt="Category 8" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Ale-8 simple syrup*</li>
+                                        <li>Ale-8 Original to fill</li>
+                                        <li>Cobbled ice</li>
+                                        <li>Fresh orange slice garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">*Equal parts Ale-8 + sugar, reduced by half. Fill pint glass or copper mug with cobbled ice, add simple syrup, top with Ale-8. Orange slice garnish.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Category 8</h3>
+                                <span class="recipe-tag">Original · Signature</span>
+                            </div>
+                        </div>
+
+                        <!-- 13 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/Gorifier_ale-8_punch_500x500.jpg.avif" alt="The Ale-8 Gorifier" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Bourbon</li>
+                                        <li>Ale-8 simple syrup</li>
+                                        <li>Fresh lemon juice + bitters</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine all except Ale-8 in shaker half-filled with ice. Shake, strain into Old Fashioned glass over fresh ice. Top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Ale-8 Gorifier</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 14 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/original_ale-8_ale-8_punch_500x500.jpg.avif" alt="The Original Ale-8 Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Bourbon or vodka</li>
+                                        <li>Lemon juice + simple syrup</li>
+                                        <li>Ale-8 Original to top</li>
+                                        <li>Ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake spirit, lemon juice, and simple syrup over ice. Strain to a highball glass over ice. Top with Ale-8 Original.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Original Ale-8 Punch</h3>
+                                <span class="recipe-tag">Original · Punch</span>
+                            </div>
+                        </div>
+
+                        <!-- 15 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale-8_cider-punch_500x500-comp.jpg.avif" alt="Ale-8 Cider Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Maker's Mark + 4 cinnamon sticks*</li>
+                                        <li>Apple cider + lemon juice</li>
+                                        <li>Ale-8 Original to top</li>
+                                        <li>*Macerate 2+ hours</li>
+                                    </ul>
+                                    <p class="recipe-method">Steep cinnamon sticks in Maker's Mark for 2+ hours. Combine with cider and lemon over ice. Top with Ale-8 just before serving.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Ale-8 Cider Punch</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 16 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cocktials_0004_south-of-the-bluegrass-400x400-1.jpg.avif" alt="South of the Bluegrass" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz tequila blanco</li>
+                                        <li>¾ oz fresh lime juice</li>
+                                        <li>½ oz agave nectar</li>
+                                        <li>Ale-8 Original to top · salted rim</li>
+                                    </ul>
+                                    <p class="recipe-method">Salt the rim. Shake tequila, lime, and agave with ice. Strain over fresh ice in a rocks glass. Top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">South of the Bluegrass</h3>
+                                <span class="recipe-tag">Original · Tequila</span>
+                            </div>
+                        </div>
+
+                        <!-- 17 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/Love-Potion-8-Cocktail.jpg.avif" alt="Love Potion 8" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz raspberry vodka</li>
+                                        <li>1 oz cranberry juice</li>
+                                        <li>½ oz grenadine</li>
+                                        <li>Cherry Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake raspberry vodka, cranberry juice, and grenadine over ice. Strain to a coupe or highball, top with Cherry Ale-8. Garnish with a cherry.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Love Potion 8</h3>
+                                <span class="recipe-tag">Cherry · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 18 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/blackberry_kentucky_mule_500x500.jpg.avif" alt="Blackberry Kentucky Mule" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz bourbon</li>
+                                        <li>1 oz fresh lime juice</li>
+                                        <li>½ oz ginger syrup</li>
+                                        <li>Blackberry Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake bourbon, lime, and ginger syrup with ice. Double strain into a copper mug over cobbled ice. Top with Blackberry Ale-8, swizzle lightly.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Blackberry Kentucky Mule</h3>
+                                <span class="recipe-tag">Black Cherry · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 19 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/blackberry_smash_500x500.jpg.avif" alt="Blackberry Smash" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Bourbon + Orange Curaçao</li>
+                                        <li>Blackberry syrup + lemon juice</li>
+                                        <li>Mint + bitters</li>
+                                        <li>Blackberry Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle mint with blackberry syrup and lemon. Add bourbon, orange curaçao, and bitters over ice. Shake, strain over ice, top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Blackberry Smash</h3>
+                                <span class="recipe-tag">Black Cherry · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 20 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/blackberry_sangria_500x500.jpg.avif" alt="Blackberry Mint Smash" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh blackberries (muddled)</li>
+                                        <li>Fresh mint + simple syrup</li>
+                                        <li>Fresh lime juice + bourbon</li>
+                                        <li>Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle fresh blackberries, mint, syrup, and lime. Add bourbon over ice, shake, strain into a rocks glass. Top with Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Blackberry Mint Smash</h3>
+                                <span class="recipe-tag">Black Cherry · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 21 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale-8-cherry-margarita.jpg.avif" alt="Cherry Margarita" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Tequila</li>
+                                        <li>Margarita mix</li>
+                                        <li>Cherry Ale-8 to top</li>
+                                        <li>Salt rim · lime &amp; cherry garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Salt the rim of a margarita glass. Shake tequila and margarita mix with ice. Pour over fresh ice, top with Cherry Ale-8. Garnish with lime and cherry.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Margarita</h3>
+                                <span class="recipe-tag">Cherry · Tequila</span>
+                            </div>
+                        </div>
+
+                        <!-- 22 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale-stargazer-lily-300x300.jpg.avif" alt="Cherry Ale-8 Stargazer Lily" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz vodka</li>
+                                        <li>2 oz lemonade</li>
+                                        <li>½ oz triple sec</li>
+                                        <li>Cherry Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Add vodka, lemonade, and triple sec to a stemless wine glass. Stir, then add ice. Top with Cherry Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Stargazer Lily</h3>
+                                <span class="recipe-tag">Cherry · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 23 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cherry_punch_500x500.jpg.avif" alt="Cherry Ale-8 Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Bourbon or rum</li>
+                                        <li>Lemonade + fresh cherries</li>
+                                        <li>Cherry Ale-8 to top</li>
+                                        <li>Ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine spirit, lemonade, and cherries over ice in a pitcher or punch bowl. Top with Cherry Ale-8 just before serving.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Ale-8 Punch</h3>
+                                <span class="recipe-tag">Cherry · Punch</span>
+                            </div>
+                        </div>
+
+                        <!-- 24 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/not-so-scary-cherry_punch_500x500.jpg.avif" alt="Not-So-Scary Cherry Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Cherry Ale-8</li>
+                                        <li>Cherry juice + grenadine</li>
+                                        <li>Fresh lime juice</li>
+                                        <li>Maraschino cherries garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine cherry juice, grenadine, and lime juice over ice. Top with Cherry Ale-8. Garnish with maraschino cherries and enjoy.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Not-So-Scary Cherry Punch</h3>
+                                <span class="recipe-tag">Cherry · Mocktail-Friendly</span>
+                            </div>
+                        </div>
+
+                        <!-- 25 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/orange_cream_ale-8_punch_500x500.jpg.avif" alt="Orange Cream Ale-8 Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Vodka or rum</li>
+                                        <li>Orange juice + cream of coconut</li>
+                                        <li>Orange Cream Ale-8 to top</li>
+                                        <li>Cobbled ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake spirit, OJ, and cream of coconut with ice. Strain to a highball glass over cobbled ice. Top with Orange Cream Ale-8.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Orange Cream Ale-8 Punch</h3>
+                                <span class="recipe-tag">Orange Cream · Punch</span>
+                            </div>
+                        </div>
+
+                        <!-- 26 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/orange_scream_ale-8_punch_500x500.jpg.avif" alt="The Orange Scream" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz vodka</li>
+                                        <li>1 oz peach schnapps</li>
+                                        <li>1 oz fresh orange juice</li>
+                                        <li>Orange Cream Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake vodka, peach schnapps, and OJ with ice. Strain over fresh ice in a highball. Top with Orange Cream Ale-8. Garnish with orange slice.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Orange Scream</h3>
+                                <span class="recipe-tag">Orange Cream · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 27 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale8-cocktail-burley-temple-400x400-1.jpg.avif" alt="Burley Temple" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Cherry Zero Ale-8</li>
+                                        <li>Splash of grenadine</li>
+                                        <li>Splash of orange juice</li>
+                                        <li>Cherry &amp; orange slice garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Fill a glass with ice. Add a splash of grenadine and OJ. Top with Cherry Zero Ale-8 and garnish with a cherry and orange slice.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Burley Temple</h3>
+                                <span class="recipe-tag">Cherry Zero · Mocktail</span>
+                            </div>
+                        </div>
+
+                        <!-- 28 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/header_hot-toddy_ale-8_500x500-comp.jpg.avif" alt="Ale-8 Bourbon Lemonade" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz Kentucky bourbon</li>
+                                        <li>1 oz fresh lemon juice</li>
+                                        <li>½ oz simple syrup</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine bourbon, lemon, and simple syrup over ice. Stir, then top with Ale-8 Original. Garnish with lemon wheel and mint.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Ale-8 Bourbon Lemonade</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 29 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/header_hot-toddy_ale-8_500x500-comp.jpg.avif" alt="The Wainscott" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz Kentucky straight bourbon</li>
+                                        <li>Ale-8 simple syrup</li>
+                                        <li>2 dashes Angostura bitters</li>
+                                        <li>Ale-8 Original splash · orange peel</li>
+                                    </ul>
+                                    <p class="recipe-method">Stir bourbon, simple syrup, and bitters over ice. Strain into a rocks glass with a large ice cube. Splash of Ale-8, express orange peel.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Wainscott</h3>
+                                <span class="recipe-tag">Original · Bourbon</span>
+                            </div>
+                        </div>
+
+                        <!-- 30 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale8_kentucky_mule_500x500.jpg.avif" alt="Zero Sugar Mule" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz vodka</li>
+                                        <li>¾ oz fresh lime juice</li>
+                                        <li>Zero Sugar Ale-8 to fill</li>
+                                        <li>Candied ginger &amp; lime garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Fill a copper mug with ice. Add vodka and lime juice. Top with Zero Sugar Ale-8. Garnish with candied ginger and lime wedge.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Zero Sugar Mule</h3>
+                                <span class="recipe-tag">Zero Sugar · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 31 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/cocktials_0004_south-of-the-bluegrass-400x400-1.jpg.avif" alt="Zero Sugar Paloma" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz tequila blanco</li>
+                                        <li>1 oz fresh grapefruit juice</li>
+                                        <li>½ oz lime juice</li>
+                                        <li>Zero Sugar Ale-8 to top · salt rim</li>
+                                    </ul>
+                                    <p class="recipe-method">Salt the rim. Shake tequila, grapefruit, and lime with ice. Strain over fresh ice. Top with Zero Sugar Ale-8. Grapefruit garnish.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Zero Sugar Paloma</h3>
+                                <span class="recipe-tag">Zero Sugar · Tequila</span>
+                            </div>
+                        </div>
+
+                        <!-- 32 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale-8-cherry-margarita.jpg.avif" alt="Cherry Zero Jubilee" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz gin</li>
+                                        <li>¾ oz fresh lime juice</li>
+                                        <li>½ oz maraschino liqueur</li>
+                                        <li>Cherry Zero Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake gin, lime, and maraschino with ice. Strain into a coupe or rocks glass. Top with Cherry Zero Ale-8. Cherry garnish.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Zero Jubilee</h3>
+                                <span class="recipe-tag">Cherry Zero · Gin</span>
+                            </div>
+                        </div>
+
+                        <!-- 33 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/ale8_kentucky_mule_500x500.jpg.avif" alt="Cherry Zero Mule" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz vodka</li>
+                                        <li>¾ oz fresh lime juice</li>
+                                        <li>Cherry Zero Ale-8 to fill</li>
+                                        <li>Cherry &amp; lime garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Build over ice in a copper mug. Add vodka and lime, top with Cherry Zero Ale-8. Stir once and garnish with cherry and lime.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Zero Mule</h3>
+                                <span class="recipe-tag">Cherry Zero · Vodka</span>
+                            </div>
+                        </div>
+
+                        <!-- 34 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/orange_cream_ale-8_punch_500x500.jpg.avif" alt="Orange Dream Crush" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz coconut rum</li>
+                                        <li>1 oz cream of coconut</li>
+                                        <li>Orange Cream Ale-8 to top</li>
+                                        <li>Orange slice garnish</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake coconut rum and cream of coconut with ice. Strain over fresh ice in a highball. Top with Orange Cream Ale-8. Orange slice garnish.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Orange Dream Crush</h3>
+                                <span class="recipe-tag">Orange Cream · Rum</span>
+                            </div>
+                        </div>
+
+                        <!-- 35 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/original_ale-8_ale-8_punch_500x500.jpg.avif" alt="Paw Paw Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1½ oz white rum</li>
+                                        <li>1 oz paw paw or mango juice</li>
+                                        <li>½ oz fresh lime juice</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Shake rum, paw paw juice, and lime with ice. Strain over fresh ice in a highball. Top with Ale-8 Original. Garnish with lime.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Paw Paw Punch</h3>
+                                <span class="recipe-tag">Original · Rum</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════
+                     SECTION 2 · MOCKTAILS (9)
+                ═══════════════════════════════════════ -->
+                <div class="recipe-section" id="mocktails">
+                    <div class="section-header">
+                        <h2 id="mocktails">Mocktails</h2>
+                        <span class="section-count">9 Recipes</span>
+                    </div>
+                    <div class="recipes-grid">
+
+                        <!-- M1 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/Gorifier_ale-8_punch_500x500.jpg.avif" alt="The Ale-8 Gorifier" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh lemonade</li>
+                                        <li>Fresh lemon juice + bitters</li>
+                                        <li>Ale-8 Original to top</li>
+                                        <li>Ice &amp; lemon wheel</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine lemonade and lemon juice over ice. Add bitters and stir. Top with Ale-8 Original and garnish with lemon wheel.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Ale-8 Gorifier</h3>
+                            </div>
+                        </div>
+
+                        <!-- M2 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/orange_scream_ale-8_punch_500x500.jpg.avif" alt="The Orange Scream" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 oz peach schnapps</li>
+                                        <li>2 oz fresh orange juice</li>
+                                        <li>Orange Cream Ale-8 to top</li>
+                                        <li>Ice &amp; orange slice</li>
+                                    </ul>
+                                    <p class="recipe-method">Pour peach schnapps and fresh orange juice over ice. Stir gently and top with Orange Cream Ale-8. Garnish with orange slice.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Orange Scream</h3>
+                            </div>
+                        </div>
+
+                        <!-- M3 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/not-so-scary-cherry_punch_500x500.jpg.avif" alt="Not So Scary Cherry Punch" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Cherry Ale-8</li>
+                                        <li>Grenadine + fresh lime juice</li>
+                                        <li>Maraschino cherries</li>
+                                        <li>Ice</li>
+                                    </ul>
+                                    <p class="recipe-method">Pour grenadine and lime juice over ice. Top with Cherry Ale-8 and stir gently. Garnish with maraschino cherries and enjoy!</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Not So Scary Cherry Punch</h3>
+                            </div>
+                        </div>
+
+                        <!-- M4 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/mocktail-blocks-ale-8-blackberry-smash-400x400-1.jpg.avif" alt="Blackberry Mint Smash" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh blackberries (muddled)</li>
+                                        <li>Fresh mint + simple syrup</li>
+                                        <li>Fresh lime juice</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle blackberries, mint, and syrup in a glass. Add lime juice over ice and stir. Top with Ale-8 and garnish with mint sprig.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Blackberry Mint Smash</h3>
+                            </div>
+                        </div>
+
+                        <!-- M5 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/mocktail-blocks-ale-8-white-christmas-400x400-1.jpg.avif" alt="White Christmas" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1 oz white chocolate syrup</li>
+                                        <li>2 oz vanilla cream</li>
+                                        <li>Ale-8 Original to top</li>
+                                        <li>Whipped cream &amp; candy cane</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine white chocolate syrup and vanilla cream over ice. Top with Ale-8 Original. Crown with whipped cream and candy cane garnish.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">White Christmas</h3>
+                            </div>
+                        </div>
+
+                        <!-- M6 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/ale-8-cherry-wainscott2.jpg.avif" alt="The Wainscott" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh cherry syrup</li>
+                                        <li>Simple syrup + bitters</li>
+                                        <li>Fresh orange juice</li>
+                                        <li>Cherry Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Stir cherry syrup, simple syrup, and bitters over ice. Add fresh OJ and stir. Top with Cherry Ale-8 and express orange peel.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">The Wainscott</h3>
+                            </div>
+                        </div>
+
+                        <!-- M7 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/holidaycheer-1-400x400-1.png.avif" alt="Classic Holiday Cheer" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Cranberry juice + orange juice</li>
+                                        <li>Fresh lime juice</li>
+                                        <li>Ginger ale</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Mix cranberry and orange juices with fresh lime over ice. Top with ginger ale and Ale-8 Original. Garnish with cranberries.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Classic Holiday Cheer</h3>
+                            </div>
+                        </div>
+
+                        <!-- M8 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/ale-8-skinny-berry-fizz.jpg.avif" alt="Zero Berry Fizz" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Mixed fresh berries (muddled)</li>
+                                        <li>Fresh lemon juice</li>
+                                        <li>Stevia or honey (optional)</li>
+                                        <li>Zero Sugar Ale-8 to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle fresh berries and lemon juice in glass. Add sweetener if desired. Top with Zero Sugar Ale-8 and ice. Stir gently.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Zero Berry Fizz</h3>
+                            </div>
+                        </div>
+
+                        <!-- M9 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media">
+                                <img src="recipecards/cocktails/mocktails/Jubil8-copy-400x400-1.png.avif" alt="Mock Mint Julep" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh mint leaves</li>
+                                        <li>Simple syrup</li>
+                                        <li>Fresh lime juice</li>
+                                        <li>Ale-8 Original to top</li>
+                                    </ul>
+                                    <p class="recipe-method">Muddle mint with simple syrup in a silver cup. Add lime juice and crushed ice. Stir gently and top with Ale-8. Garnish with mint sprig.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Mock Mint Julep</h3>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════
+                     SECTION 3 · FOOD (9)
+                ═══════════════════════════════════════ -->
+                <div class="recipe-section" id="food">
+                    <div class="section-header">
+                        <h2 id="food">Food</h2>
+                        <span class="section-count">9 Recipes</span>
+                    </div>
+                    <div class="recipes-grid">
+
+                        <!-- F1 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/strawmelon_ale8_salad_500x500_480-1.jpg.avif" alt="StrawMelon Salad" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Fresh strawberries &amp; melon</li>
+                                        <li>Mint + lime dressing</li>
+                                        <li>Ale-8 reduction (optional)</li>
+                                        <li>Honey &amp; sea salt</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine fresh strawberries and melon chunks. Dress with lime juice, mint, honey, and sea salt. Drizzle with Ale-8 reduction for extra flavor.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">StrawMelon Salad</h3>
+                            </div>
+                        </div>
+
+                        <!-- F2 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/strawmelon_ale8_bundt-cake_500x500_480.jpg.avif" alt="Strawberry Bundt Cake with Strawmelon Ale-8® Glaze" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>1 box strawberry cake mix</li>
+                                        <li>1 cup Strawmelon Ale-8</li>
+                                        <li>3 eggs</li>
+                                        <li>Powdered sugar &amp; Ale-8 glaze</li>
+                                    </ul>
+                                    <p class="recipe-method">Replace water with Strawmelon Ale-8 in cake mix. Add eggs and bake in Bundt pan per instructions. Cool, then drizzle with Ale-8 powdered sugar glaze.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Strawberry Bundt Cake</h3>
+                            </div>
+                        </div>
+
+                        <!-- F3 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/strawmelon_ale8_summer-delight_500x500_480.jpg.avif" alt="StrawMelon Summer Delight" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Frozen strawberries &amp; melon</li>
+                                        <li>Vanilla yogurt or ice cream</li>
+                                        <li>Strawmelon Ale-8 reduction</li>
+                                        <li>Whipped cream &amp; mint</li>
+                                    </ul>
+                                    <p class="recipe-method">Layer frozen strawberries and melon with vanilla yogurt in a glass. Drizzle Ale-8 reduction and top with whipped cream and fresh mint.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">StrawMelon Summer Delight</h3>
+                            </div>
+                        </div>
+
+                        <!-- F4 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/Ale-8-One-Horsin-Around-Pie.jpg.avif" alt="Ale-8-One®'s Horsin' Around Pie" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>Pie crust + cream cheese filling</li>
+                                        <li>12 oz Ale-8 Original reduction</li>
+                                        <li>Brown sugar &amp; butter caramel</li>
+                                        <li>Whipped cream topping</li>
+                                    </ul>
+                                    <p class="recipe-method">Line crust with cream cheese filling. Top with caramel made from Ale-8 reduction, brown sugar, and butter. Bake at 350°F for 35 minutes. Serve with whipped cream.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Horsin' Around Pie</h3>
+                            </div>
+                        </div>
+
+                        <!-- F5 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/ale-8-one_bourbon_balls_500x500.jpg.avif" alt="Ale-8-One® Mint Julep Bourbon Balls" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 cups crushed pecans</li>
+                                        <li>1 lb powdered sugar</li>
+                                        <li>2 tbsp Ale-8 Original reduction</li>
+                                        <li>Chocolate for coating</li>
+                                    </ul>
+                                    <p class="recipe-method">Mix crushed pecans, powdered sugar, and Ale-8 reduction. Roll into balls and dip in melted chocolate. Refrigerate until set.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Bourbon Balls</h3>
+                            </div>
+                        </div>
+
+                        <!-- F6 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/ale-8-one_southern_pralines_500x500.jpg.avif" alt="Ale-8-One® Southern Pralines" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>2 cups pecan halves</li>
+                                        <li>1½ cups brown sugar</li>
+                                        <li>6 oz Ale-8 Original</li>
+                                        <li>2 tbsp butter &amp; vanilla</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine sugar, Ale-8, and butter. Heat to 236°F (soft ball stage). Cool slightly, beat until creamy. Add pecans and vanilla. Drop spoonfuls on parchment to set.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Southern Pralines</h3>
+                            </div>
+                        </div>
+
+                        <!-- F7 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/ale-8-one_putting-the-ginger-in-gingerbread_500x500.jpg.avif" alt="Ale-8-One Putting the Ginger in Gingerbread" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>½ cup Ale-8 Original</li>
+                                        <li>2 cups flour + ginger &amp; spices</li>
+                                        <li>¾ cup molasses</li>
+                                        <li>Butter &amp; brown sugar</li>
+                                    </ul>
+                                    <p class="recipe-method">Cream butter and brown sugar. Add molasses and Ale-8 reduction. Mix in spiced flour. Bake at 350°F for 25-30 minutes. Frost with cream cheese icing.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Gingerbread</h3>
+                            </div>
+                        </div>
+
+                        <!-- F8 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/cherry-ale-8_ham-glaze_500x500-comp.jpg.avif" alt="Cherry Ham Glaze" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>12 oz Cherry Ale-8</li>
+                                        <li>½ cup honey</li>
+                                        <li>¼ cup brown sugar</li>
+                                        <li>2 tbsp Dijon mustard</li>
+                                    </ul>
+                                    <p class="recipe-method">Whisk together glaze ingredients. Brush over ham every 20 minutes while baking at 325°F until internal temp reaches 140°F. Baste frequently with pan drippings.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cherry Ham Glaze</h3>
+                            </div>
+                        </div>
+
+                        <!-- F9 -->
+                        <div class="recipe-card">
+                            <div class="recipe-media food-bg">
+                                <img src="recipecards/cocktails/food/orange-cream-ale-8_cranberry-sauce_500x500-comp.jpg.avif" alt="Orange Cream Cranberry Sauce" class="recipe-img">
+                                <div class="recipe-overlay"><div class="recipe-details">
+                                    <ul class="recipe-ingredients">
+                                        <li>12 oz Orange Cream Ale-8</li>
+                                        <li>12 oz fresh cranberries</li>
+                                        <li>¾ cup sugar</li>
+                                        <li>Orange zest &amp; vanilla</li>
+                                    </ul>
+                                    <p class="recipe-method">Combine Ale-8, sugar, and cranberries in saucepan. Simmer until berries burst (about 15 min). Stir in orange zest and vanilla. Cool before serving.</p>
+                                </div></div>
+                            </div>
+                            <div class="recipe-footer">
+                                <h3 class="recipe-name">Cranberry Sauce</h3>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <div id="copy-toast">Copied to clipboard!</div>
+
+        <script>
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            document.querySelectorAll('.recipe-card').forEach(card => {
+                const nameEl = card.querySelector('.recipe-name');
+                const overlayDetail = card.querySelector('.recipe-overlay .recipe-details');
+                if (!nameEl || !overlayDetail) return;
+                const titleEl = document.createElement('h3');
+                titleEl.className = 'recipe-overlay-title';
+                titleEl.textContent = nameEl.textContent.trim();
+                overlayDetail.insertBefore(titleEl, overlayDetail.firstChild);
+            });
+
+            const toast = document.getElementById('copy-toast');
+            let toastTimer;
+
+            document.querySelectorAll('.recipe-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const name = card.querySelector('.recipe-name');
+                    const tag = card.querySelector('.recipe-tag');
+                    const ingredients = card.querySelectorAll('.recipe-ingredients li');
+                    const method = card.querySelector('.recipe-method');
+
+                    const lines = [];
+                    if (name) lines.push(name.textContent.trim());
+                    if (tag) lines.push(tag.textContent.trim());
+                    lines.push('');
+                    ingredients.forEach(li => lines.push('• ' + li.textContent.trim()));
+                    if (method) {
+                        lines.push('');
+                        lines.push(method.textContent.trim());
+                    }
+
+                    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+                        clearTimeout(toastTimer);
+                        toast.classList.add('show');
+                        toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

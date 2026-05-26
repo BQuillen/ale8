@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Shop</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            .shop-page {
+                padding: 0 0 60px;
+            }
+
+            /* ── Shop Hero Banner ── */
+            .shop-banner {
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+                padding: 56px 24px 52px;
+                text-align: center;
+            }
+
+            .shop-banner h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(2rem, 5vw, 3.2rem);
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 14px;
+            }
+
+            .shop-banner p {
+                font-size: 1.1rem;
+                color: rgba(255,255,255,0.78);
+                max-width: 600px;
+                margin: 0 auto 32px;
+                line-height: 1.6;
+            }
+
+            .banner-links {
+                display: flex;
+                justify-content: center;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .banner-btn {
+                display: inline-block;
+                padding: 13px 30px;
+                border-radius: 999px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                text-decoration: none;
+                transition: transform 220ms ease, background 220ms ease;
+            }
+
+            .banner-btn-primary {
+                background: #c21f1f;
+                color: #ffffff;
+            }
+
+            .banner-btn-primary:hover {
+                background: #a01a1a;
+                transform: translateY(-2px);
+            }
+
+            .banner-btn-outline {
+                background: transparent;
+                color: #ffffff;
+                border: 2px solid rgba(255,255,255,0.6);
+            }
+
+            .banner-btn-outline:hover {
+                background: rgba(255,255,255,0.12);
+                transform: translateY(-2px);
+            }
+
+            /* ── Cart bar ── */
+            .cart-bar {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 14px 24px;
+                background: #f7f6f2;
+                border-bottom: 1px solid rgba(0,0,0,0.07);
+            }
+
+            .cart-bar-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                background: #195a43;
+                color: #ffffff;
+                border: none;
+                padding: 10px 22px;
+                border-radius: 999px;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.88rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background 220ms ease, transform 220ms ease;
+            }
+
+            .cart-bar-btn:hover {
+                background: #143d2c;
+                transform: translateY(-1px);
+            }
+
+            .cart-bar-count {
+                background: #c21f1f;
+                color: #fff;
+                font-size: 0.75rem;
+                font-weight: 700;
+                border-radius: 999px;
+                padding: 2px 7px;
+                min-width: 20px;
+                text-align: center;
+            }
+
+            /* ── Section wrapper ── */
+            .shop-section {
+                padding: 52px 24px 0;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .section-head {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 28px;
+                flex-wrap: wrap;
+            }
+
+            .section-head h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.6rem;
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin: 0;
+                padding-bottom: 10px;
+                border-bottom: 3px solid #c21f1f;
+            }
+
+            .section-link {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #195a43;
+                text-decoration: none;
+                transition: color 200ms ease;
+                white-space: nowrap;
+            }
+
+            .section-link:hover {
+                color: #c21f1f;
+            }
+
+            /* ── Product grid ── */
+            .product-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 24px;
+            }
+
+            .product-card {
+                background: rgba(255,255,255,0.97);
+                border-radius: 16px;
+                padding: 24px 20px;
+                box-shadow: 0 8px 24px rgba(17,24,34,0.09);
+                border: 1px solid rgba(0,0,0,0.05);
+                transition: transform 280ms ease, box-shadow 280ms ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                text-decoration: none;
+                color: inherit;
+                cursor: pointer;
+            }
+
+            .product-card:hover {
+                transform: translateY(-7px);
+                box-shadow: 0 18px 42px rgba(17,24,34,0.14);
+            }
+
+            .product-image {
+                width: 100%;
+                max-width: 180px;
+                height: 240px;
+                object-fit: contain;
+                object-position: center;
+                margin-bottom: 18px;
+                display: block;
+            }
+
+            .product-image-sq {
+                width: 100%;
+                height: 200px;
+                object-fit: contain;
+                object-position: center;
+                margin-bottom: 18px;
+                display: block;
+            }
+
+            .product-label {
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: #195a43;
+                font-weight: 700;
+                margin-bottom: 5px;
+            }
+
+            .product-title {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.2rem;
+                color: #1b4f39;
+                margin: 0 0 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+
+            .product-price {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.05rem;
+                color: #c21f1f;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .product-description {
+                font-size: 0.88rem;
+                color: #666;
+                line-height: 1.55;
+                margin-bottom: 18px;
+                flex-grow: 1;
+            }
+
+            .btn-cart {
+                background: #c21f1f;
+                color: white;
+                border: none;
+                padding: 11px 26px;
+                border-radius: 20px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                font-size: 0.88rem;
+                transition: background 220ms ease, transform 220ms ease;
+                width: 100%;
+            }
+
+            .btn-cart:hover {
+                background: #a01a1a;
+                transform: scale(1.03);
+            }
+
+            .btn-detail {
+                display: block;
+                background: transparent;
+                color: #195a43;
+                border: 2px solid #195a43;
+                padding: 9px 20px;
+                border-radius: 20px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-size: 0.82rem;
+                text-decoration: none;
+                margin-top: 8px;
+                transition: background 200ms ease, color 200ms ease;
+                text-align: center;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .btn-detail:hover {
+                background: #195a43;
+                color: #fff;
+            }
+
+            /* ── Merch category strip ── */
+            .merch-categories {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 16px;
+            }
+
+            .merch-cat-card {
+                background: rgba(255,255,255,0.97);
+                border-radius: 16px;
+                padding: 28px 16px;
+                box-shadow: 0 6px 20px rgba(17,24,34,0.08);
+                border: 1px solid rgba(0,0,0,0.05);
+                text-align: center;
+                text-decoration: none;
+                color: inherit;
+                transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .merch-cat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 14px 36px rgba(17,24,34,0.13);
+                border-color: #c21f1f;
+            }
+
+            .merch-cat-icon {
+                width: 80px;
+                height: 80px;
+                object-fit: contain;
+                display: block;
+            }
+
+            .merch-cat-icon-emoji {
+                font-size: 2.8rem;
+                line-height: 1;
+            }
+
+            .merch-cat-name {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #1b4f39;
+                margin: 0;
+            }
+
+            .merch-cat-sub {
+                font-size: 0.8rem;
+                color: #888;
+                margin: 0;
+            }
+
+            /* ── Limited Time strip ── */
+            .limited-badge {
+                display: inline-block;
+                background: #c21f1f;
+                color: #fff;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                padding: 3px 10px;
+                border-radius: 20px;
+                margin-bottom: 8px;
+            }
+
+            /* ── Toast ── */
+            .cart-toast {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: #195a43;
+                color: #fff;
+                padding: 14px 20px;
+                border-radius: 14px;
+                box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+                z-index: 100;
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                letter-spacing: 0.05em;
+                opacity: 0;
+                transform: translateY(12px);
+                transition: opacity 220ms ease, transform 220ms ease;
+                pointer-events: none;
+            }
+
+            .cart-toast.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            @media (max-width: 700px) {
+                .shop-banner { padding: 40px 20px 36px; }
+                .shop-section { padding: 40px 16px 0; }
+                .product-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+                .merch-categories { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+                .product-image { height: 180px; }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">The Ale-8 One Shop</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="shop-page">
+
+                <!-- Hero Banner -->
+                <div class="shop-banner">
+                    <h2>Shop Ale-8 One</h2>
+                    <p>Kentucky's original ginger citrus soda — bottles, 12-packs, and official gear all in one place.</p>
+                    <div class="banner-links">
+                        <a href="store.html" class="banner-btn banner-btn-primary">Order Bottles</a>
+                        <a href="merch.html" class="banner-btn banner-btn-outline">Shop Merch</a>
+                    </div>
+                </div>
+
+                <!-- Cart bar -->
+                <div class="cart-bar">
+                    <a href="cart.html" class="cart-bar-btn">
+                        Cart <span class="cart-bar-count" id="cartCount">0</span>
+                    </a>
+                </div>
+
+                <!-- ── Bottles Section ── -->
+                <div class="shop-section">
+                    <div class="section-head">
+                        <h2>Ale-8 One Bottles</h2>
+                        <a href="store.html" class="section-link">See all bottles &rsaquo;</a>
+                    </div>
+                    <div class="product-grid">
+
+                        <div class="product-card">
+                            <img src="images/Orginal.png" alt="Ale-8 One Original" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Original</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">The signature ginger citrus soda with real cane sugar, a peppery finish, and the balanced sweetness that made Ale-8 famous.</p>
+                            <button class="btn-cart" data-product="Original">Add to Cart</button>
+                            <a href="bottlepages/original.html" class="btn-detail">View Details</a>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/cherry.png" alt="Ale-8 One Cherry" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Cherry</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">A smooth cherry infusion with the same spice-forward sweetness of Original — rich cherry soda with the classic Ale-8 bite.</p>
+                            <button class="btn-cart" data-product="Cherry">Add to Cart</button>
+                            <a href="bottlepages/cherry.html" class="btn-detail">View Details</a>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/orangecream.png" alt="Ale-8 One Orange Cream" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Orange Cream</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">Bright orange flavor with a creamy finish, crafted for a crisp citrus experience with the brand's signature ginger bite.</p>
+                            <button class="btn-cart" data-product="Orange Cream">Add to Cart</button>
+                            <a href="bottlepages/orangecream.html" class="btn-detail">View Details</a>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/blackcherry.png" alt="Ale-8 One Black Cherry" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Black Cherry</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">Deep black cherry sweetness meets Ale-8's spicy citrus blend for a darker, fruit-forward soda true to the original character.</p>
+                            <button class="btn-cart" data-product="Black Cherry">Add to Cart</button>
+                            <a href="bottlepages/blackcherry.html" class="btn-detail">View Details</a>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/zerosugar.png" alt="Ale-8 One Zero Sugar" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Zero Sugar</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">The Original recipe reimagined without sugar — bold ginger, citrus, and spice in an ultra-refreshing zero-calorie format.</p>
+                            <button class="btn-cart" data-product="Zero Sugar">Add to Cart</button>
+                            <a href="bottlepages/zerosugar.html" class="btn-detail">View Details</a>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/cherryzero.png" alt="Ale-8 One Cherry Zero" class="product-image">
+                            <p class="product-label">Ale-8 One</p>
+                            <h3 class="product-title">Cherry Zero</h3>
+                            <p class="product-price">$2.99</p>
+                            <p class="product-description">Cherry flavor with zero sugar and a clean finish — the same cherry Ale-8 profile in a lighter, diet-friendly package.</p>
+                            <button class="btn-cart" data-product="Cherry Zero">Add to Cart</button>
+                            <a href="bottlepages/cherryzero.html" class="btn-detail">View Details</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── 12-Packs Section ── -->
+                <div class="shop-section">
+                    <div class="section-head">
+                        <h2>12-Packs</h2>
+                        <a href="store.html" class="section-link">See full store &rsaquo;</a>
+                    </div>
+                    <div class="product-grid">
+
+                        <div class="product-card">
+                            <img src="images/12packorginal.png" alt="Original 12-Pack" class="product-image-sq">
+                            <p class="product-label">12-Pack</p>
+                            <h3 class="product-title">Original</h3>
+                            <p class="product-price">$19.99</p>
+                            <p class="product-description">A full dozen of the original ginger citrus soda. Real cane sugar, bold ginger bite — stocked and ready.</p>
+                            <button class="btn-cart" data-product="Original 12-Pack">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/cherry12pack.png" alt="Cherry 12-Pack" class="product-image-sq">
+                            <p class="product-label">12-Pack</p>
+                            <h3 class="product-title">Cherry</h3>
+                            <p class="product-price">$19.99</p>
+                            <p class="product-description">Twelve bottles of smooth Cherry Ale-8 — sweet, spiced, and ready to share with the whole crew.</p>
+                            <button class="btn-cart" data-product="Cherry 12-Pack">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/zerosugar12pack.png" alt="Zero Sugar 12-Pack" class="product-image-sq">
+                            <p class="product-label">12-Pack</p>
+                            <h3 class="product-title">Zero Sugar</h3>
+                            <p class="product-price">$19.99</p>
+                            <p class="product-description">Twelve zero-sugar Ale-8s. All the ginger citrus flavor, none of the sugar. Ideal for everyday drinking.</p>
+                            <button class="btn-cart" data-product="Zero Sugar 12-Pack">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/pawpaw12pack.png" alt="Pawpaw 12-Pack" class="product-image-sq">
+                            <span class="limited-badge">Limited Time</span>
+                            <p class="product-label">Seasonal</p>
+                            <h3 class="product-title">Pawpaw</h3>
+                            <p class="product-price">$21.99</p>
+                            <p class="product-description">A rare taste of Appalachia — Ale-8's take on the native pawpaw. Tropical, custard-sweet with signature ginger finish.</p>
+                            <button class="btn-cart" data-product="Pawpaw 12-Pack">Add to Cart</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── Merchandise Categories ── -->
+                <div class="shop-section">
+                    <div class="section-head">
+                        <h2>Official Merchandise</h2>
+                        <a href="merch.html" class="section-link">Shop all merch &rsaquo;</a>
+                    </div>
+                    <div class="merch-categories">
+
+                        <a href="merch.html#apparel" class="merch-cat-card">
+                            <img src="images/vintage tee.png" alt="Apparel" class="merch-cat-icon">
+                            <p class="merch-cat-name">Apparel</p>
+                            <p class="merch-cat-sub">Tees, hats &amp; hoodies</p>
+                        </a>
+
+                        <a href="merch.html#drinkware" class="merch-cat-card">
+                            <img src="images/ale8glasspint.PNG" alt="Drinkware" class="merch-cat-icon">
+                            <p class="merch-cat-name">Drinkware</p>
+                            <p class="merch-cat-sub">Glasses &amp; koozies</p>
+                        </a>
+
+                        <a href="merch.html#bottle-openers" class="merch-cat-card">
+                            <img src="images/bottleopener.png" alt="Bottle Openers" class="merch-cat-icon">
+                            <p class="merch-cat-name">Bottle Openers</p>
+                            <p class="merch-cat-sub">Always ready to crack one</p>
+                        </a>
+
+                        <a href="merch.html#prints" class="merch-cat-card">
+                            <img src="images/diamondart.png" alt="Prints" class="merch-cat-icon">
+                            <p class="merch-cat-name">Prints &amp; Art</p>
+                            <p class="merch-cat-sub">Wall art &amp; collectibles</p>
+                        </a>
+
+                        <a href="merch.html#general-merchandise" class="merch-cat-card">
+                            <img src="images/cryptidstickerbundle.png" alt="General Merch" class="merch-cat-icon">
+                            <p class="merch-cat-name">General Merch</p>
+                            <p class="merch-cat-sub">Stickers, salsa &amp; more</p>
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- ── Featured Merch ── -->
+                <div class="shop-section">
+                    <div class="section-head">
+                        <h2>Fan Favorites</h2>
+                        <a href="merch.html" class="section-link">View all &rsaquo;</a>
+                    </div>
+                    <div class="product-grid">
+
+                        <div class="product-card">
+                            <img src="images/vintage tee.png" alt="Classic Logo Tee" class="product-image-sq">
+                            <p class="product-label">Apparel</p>
+                            <h3 class="product-title">Classic Logo Tee</h3>
+                            <p class="product-price">$24.99</p>
+                            <p class="product-description">Soft cotton tee with the iconic Ale-8 One logo. A Kentucky staple for any true fan of the original ginger soda.</p>
+                            <button class="btn-cart" data-product="Classic Logo Tee">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/hoodie.png" alt="Ale-8 Hoodie" class="product-image-sq">
+                            <p class="product-label">Apparel</p>
+                            <h3 class="product-title">Ale-8 Hoodie</h3>
+                            <p class="product-price">$49.99</p>
+                            <p class="product-description">Heavyweight fleece hoodie with the Ale-8 One logo. Perfect for cool Kentucky evenings with a cold one in hand.</p>
+                            <button class="btn-cart" data-product="Ale-8 Hoodie">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/ale8glasspint.PNG" alt="Ale-8 Pint Glass" class="product-image-sq">
+                            <p class="product-label">Drinkware</p>
+                            <h3 class="product-title">Ale-8 Pint Glass</h3>
+                            <p class="product-price">$14.99</p>
+                            <p class="product-description">16 oz. classic glass pint with the Ale-8 One logo. The proper vessel for enjoying your favorite ginger soda.</p>
+                            <button class="btn-cart" data-product="Ale-8 Pint Glass">Add to Cart</button>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="images/100yearsstickerbundle.png" alt="100 Years Sticker Bundle" class="product-image-sq">
+                            <p class="product-label">General</p>
+                            <h3 class="product-title">100 Years Sticker Bundle</h3>
+                            <p class="product-price">$6.99</p>
+                            <p class="product-description">Celebrate a century of Ale-8 with this limited-edition sticker bundle. Die-cut, weatherproof, and full of centennial pride.</p>
+                            <button class="btn-cart" data-product="100 Years Sticker Bundle">Add to Cart</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <div class="cart-toast" role="status" aria-live="polite" id="cartToast"></div>
+
+        <script>
+            // Tab toggle
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            // Cart
+            const cartCountEl = document.getElementById('cartCount');
+            const cartToast = document.getElementById('cartToast');
+
+            function getCartCount() {
+                return Number(localStorage.getItem('al8CartCount') || 0);
+            }
+
+            function setCartCount(n) {
+                localStorage.setItem('al8CartCount', String(n));
+                cartCountEl.textContent = n;
+            }
+
+            function showToast(msg) {
+                cartToast.textContent = msg;
+                cartToast.classList.add('visible');
+                clearTimeout(window._toastTimer);
+                window._toastTimer = setTimeout(() => cartToast.classList.remove('visible'), 2200);
+            }
+
+            setCartCount(getCartCount());
+
+            document.querySelectorAll('.btn-cart').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const product = btn.dataset.product;
+                    const count = getCartCount() + 1;
+                    setCartCount(count);
+                    const orig = btn.textContent;
+                    btn.textContent = 'Added!';
+                    btn.style.background = '#195a43';
+                    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+                    showToast(product + ' added — ' + count + ' item' + (count === 1 ? '' : 's') + ' in cart');
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,361 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f6f2;
+    color: #1f2d2b;
+}
+
+body {
+    line-height: 1.5;
+}
+
+.page-shell {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 24px;
+}
+
+.hero-header {
+    text-align: center;
+    margin-bottom: 28px;
+    position: relative;
+}
+
+.hero-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.hero-logo {
+    max-height: 160px;
+    width: auto;
+    height: auto;
+    display: block;
+}
+
+.hero-anniversary {
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-height: 85px;
+    width: auto;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.hero-subtitle {
+    margin: 12px auto 0;
+    max-width: 760px;
+    color: #195a43;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Tab bar styling similar to Ale-8 aesthetic */
+.tab-bar {
+    display: flex;
+    justify-content: center;
+    margin: 22px 0;
+}
+
+.tab-list {
+    display: flex;
+    gap: 12px;
+    list-style: none;
+    padding: 6px;
+    margin: 0;
+    background: rgba(255,255,255,0.9);
+    border-radius: 28px;
+    box-shadow: 0 8px 24px rgba(17,24,34,0.12);
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    padding: 10px 18px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #195a43;
+    font-size: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.tab:hover {
+    transform: translateY(-2px);
+}
+
+/* Individual tab hover: turn just that tab red */
+.tab:hover:not(.active) {
+    background: #c21f1f;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(194,31,31,0.2);
+}
+
+.tab.active {
+    background: #c21f1f;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(194,31,31,0.18);
+}
+
+.dropdown-tab {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 220px;
+    display: none;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(17,24,34,0.12);
+    padding: 8px 0;
+    z-index: 30;
+}
+
+.dropdown-tab:hover .dropdown-menu,
+.dropdown-tab:focus-within .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 18px;
+    color: #195a43;
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 180ms ease;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(194,31,31,0.08);
+}
+
+@media (max-width: 700px) {
+    .tab-list { padding: 4px; gap: 8px; }
+    .tab { padding: 8px 12px; font-size: 0.8rem; }
+}
+
+.bottle-showcase {
+    width: 100%;
+}
+
+.bottle-scene {
+    position: relative;
+    min-height: 620px;
+    border-radius: 24px;
+    overflow: hidden;
+    background-image: url('images/Untitled design.jpg');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 28px 70px rgba(17, 24, 34, 0.18);
+}
+
+.bottle-stack {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.info-panel {
+    position: absolute;
+    left: 220px;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 360px;
+    width: min(100%, 360px);
+    opacity: 1;
+    z-index: 50;
+    transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.info-panel.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(14px);
+    visibility: hidden;
+}
+
+.info-panel:not(.hidden) {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.bottle {
+    --offset: calc(var(--index) * 64px);
+    position: absolute;
+    left: calc(50% - 192px + var(--offset));
+    top: 50%;
+    width: 140px;
+    height: 420px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    border-radius: 18px;
+    padding: 0;
+    z-index: calc(10 - var(--index));
+    cursor: pointer;
+    transition: transform 280ms ease, left 280ms ease, filter 280ms ease, z-index 0ms linear;
+    pointer-events: auto;
+}
+
+.bottle img {
+    width: auto;
+    height: 100%;
+    display: block;
+    transform-origin: center bottom;
+    transition: transform 280ms ease;
+}
+
+.bottle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    transition: box-shadow 280ms ease;
+}
+
+.bottle:hover::before {
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.16);
+}
+
+.bottle.active {
+    z-index: 30;
+    left: 24px;
+    transform: translateY(-50%) scale(1.04);
+}
+
+.bottle.active img {
+    transform: scale(1.04);
+}
+
+.bottle[data-bottle="original"] img {
+    transform: scale(1.05);
+}
+
+.bottle.active[data-bottle="original"] img {
+    transform: scale(1.092);
+}
+
+.bottle.shifted {
+    z-index: 10;
+    transform: translate(220px, -50%) scale(0.96);
+    filter: brightness(0.94);
+}
+
+.bottle-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-card {
+    width: 100%;
+    background: rgba(255,255,255,0.96);
+    border-radius: 24px;
+    padding: 28px 26px;
+    box-shadow: 0 20px 45px rgba(19, 34, 44, 0.1);
+    border: 2px solid #c21f1f;
+}
+
+.info-label {
+    margin: 0 0 12px;
+    color: #195a43;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+}
+
+.info-title {
+    margin: 0 0 16px;
+    font-size: clamp(2rem, 2.4vw, 2.4rem);
+    color: #152a26;
+}
+
+.info-description {
+    margin: 0;
+    color: #4d534f;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+@media (max-width: 950px) {
+    .bottle-showcase {
+        grid-template-columns: 1fr;
+    }
+
+    .bottle-info {
+        order: -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .hero-logo {
+        max-height: 110px;
+    }
+
+    .hero-anniversary {
+        max-height: 60px;
+        right: -8px;
+        top: 8px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .bottle-scene {
+        min-height: 520px;
+    }
+
+    .bottle {
+        width: 116px;
+        left: calc(50% - 120px + var(--offset));
+        height: 360px;
+    }
+
+    .bottle.active {
+        transform: translate(-24px, -50%) scale(1.08);
+    }
+
+    .bottle.shifted {
+        transform: translate(62px, -50%) scale(0.95);
+    }
+
+    .info-card {
+        padding: 22px;
+    }
+}

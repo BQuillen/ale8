@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale 8</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    <style>
+        .timeline-section {
+            margin: 48px -24px 0;
+            padding: 64px 24px 56px;
+            background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+        }
+
+        .timeline-heading {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+            color: #ffffff;
+            margin: 0 0 52px;
+        }
+
+        .timeline-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .timeline-track {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            padding: 0 20px 20px;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        /* horizontal connector line at dot level */
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 48px;
+            height: 2px;
+            background: rgba(255,255,255,0.32);
+            z-index: 0;
+        }
+
+        .tl-event {
+            flex: 0 0 185px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 8px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 520ms ease, transform 520ms ease;
+            transition-delay: var(--tl-delay, 0ms);
+        }
+
+        .tl-event.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tl-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.13);
+            border: 2px solid rgba(255,255,255,0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .tl-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tl-icon img.tl-img-contain {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+        }
+
+        .tl-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 14px 12px;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.24);
+        }
+
+        .tl-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: none;
+        }
+
+        .tl-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #c21f1f;
+            margin: 0 0 7px;
+        }
+
+        .tl-text {
+            font-size: 0.76rem;
+            line-height: 1.65;
+            color: #2e3e38;
+            margin: 0;
+        }
+
+        .tl-stem {
+            width: 2px;
+            height: 24px;
+            background: rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+
+        .tl-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #c21f1f;
+            border: 3px solid #ffffff;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tl-year {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6);
+            margin-top: 8px;
+            min-height: 1em;
+        }
+
+        .timeline-coda {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1rem, 2.2vw, 1.3rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #ffffff;
+            text-align: center;
+            max-width: 660px;
+            margin: 48px auto 0;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 600ms ease 200ms, transform 600ms ease 200ms;
+        }
+
+        .timeline-coda.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">A Late One — click a bottle to learn its story.</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab active" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <section class="bottle-showcase">
+                <div class="bottle-scene" aria-label="Ale-8 bottle selection scene">
+                    <div class="bottle-stack" role="list">
+                        <button type="button" class="bottle" data-bottle="original" style="--index: 0;" aria-label="Original bottle">
+                            <img src="images/Orginal.png" alt="Ale-8 Original bottle">
+                        </button>
+                        <button type="button" class="bottle" data-bottle="cherry" style="--index: 1;" aria-label="Cherry bottle">
+                            <img src="images/cherry.png" alt="Ale-8 Cherry bottle">
+                        </button>
+                        <button type="button" class="bottle" data-bottle="orangezero" style="--index: 2;" aria-label="Orange Zero bottle">
+                            <img src="images/orangecream.png" alt="Ale-8 Orange Cream bottle">
+                        </button>
+                        <button type="button" class="bottle" data-bottle="blackcherry" style="--index: 3;" aria-label="Black Cherry bottle">
+                            <img src="images/blackcherry.png" alt="Ale-8 Black Cherry bottle">
+                        </button>
+                        <button type="button" class="bottle" data-bottle="zerosugar" style="--index: 4;" aria-label="Zero Sugar bottle">
+                            <img src="images/zerosugar.png" alt="Ale-8 Zero Sugar bottle">
+                        </button>
+                        <button type="button" class="bottle" data-bottle="cherryzero" style="--index: 5;" aria-label="Cherry Zero bottle">
+                            <img src="images/cherryzero.png" alt="Ale-8 Cherry Zero bottle">
+                        </button>
+                    </div>
+
+                    <div class="info-panel hidden" aria-live="polite">
+                        <div class="info-card">
+                            <p class="info-label">Select a bottle</p>
+                            <h2 class="info-title">Ale-8 One Collection</h2>
+                            <p class="info-description">Click any bottle to expand it, move the stack, and reveal the product details in the panel.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="timeline-section">
+                <h2 class="timeline-heading">The Ale-8 One Story</h2>
+                <div class="timeline-scroll">
+                    <div class="timeline-track">
+
+                        <div class="tl-event" style="--tl-delay: 0ms">
+                            <div class="tl-icon">
+                                <img src="images/wainscott-portrait-removebg-preview.png" alt="G.L. Wainscott" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">The Beginning</h3>
+                                <p class="tl-text">G.L. Wainscott, known as Uncle Lee, established a soft drink company in 1902 after laying eyes on a carbonation machine.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">1902</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 80ms">
+                            <div class="tl-icon">
+                                <img src="images/roxacolaa.png" alt="Roxa-Kola" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Roxa-Kola</h3>
+                                <p class="tl-text">His first signature recipe, a cola product named Roxa-Kola in honor of his wife, Roxanne, launched in 1906.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">1906</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 160ms">
+                            <div class="tl-icon">
+                                <img src="images/treasurechest100-removebg-preview.png" alt="Discovery" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">The Discovery</h3>
+                                <p class="tl-text">Uncle Lee traveled to northern Europe where he discovered ginger beer — spicy, hot to the palate, and unlike anything back home.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">c. 1910s</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 240ms">
+                            <div class="tl-icon">
+                                <img src="images/Orginal.png" alt="Ale-8 Original" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">A Late One</h3>
+                                <p class="tl-text">"A Late One" — 1920s slang for "the latest thing" — was chosen by contest to name the new ginger citrus soda.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">1926</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 320ms">
+                            <div class="tl-icon">
+                                <img src="images/Ale-8-one-bottling company.jpg" alt="Ale-8 Factory">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">New Home</h3>
+                                <p class="tl-text">The company moved to its iconic Carol Road facility in Winchester, Kentucky — the home of Ale-8 to this day.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">1965</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 400ms">
+                            <div class="tl-icon">
+                                <img src="images/cherry.png" alt="Cherry" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Cherry Arrives</h3>
+                                <p class="tl-text">Ale-8 expanded beyond its original recipe with the launch of Cherry — a smooth, fruit-forward take on the classic ginger bite.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2012</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 480ms">
+                            <div class="tl-icon">
+                                <img src="images/blackcherry.png" alt="Black Cherry" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Black Cherry</h3>
+                                <p class="tl-text">Deep black cherry sweetness meets Ale-8's spicy citrus — a darker, bolder flavor for those who crave more depth.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2016</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 560ms">
+                            <div class="tl-icon">
+                                <img src="images/zerosugar.png" alt="Zero Sugar" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Zero Sugar</h3>
+                                <p class="tl-text">The original recipe reimagined — bold ginger, citrus, and spice with zero calories and all the signature Ale-8 character.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2018</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 640ms">
+                            <div class="tl-icon">
+                                <img src="images/orangecream.png" alt="Orange Cream" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Orange Cream</h3>
+                                <p class="tl-text">Bright citrus meets smooth cream in this fan-favorite — a crisp orange soda with the unmistakable Ale-8 ginger finish.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2020</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 720ms">
+                            <div class="tl-icon">
+                                <img src="images/cherryzero.png" alt="Cherry Zero" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Cherry Zero</h3>
+                                <p class="tl-text">Cherry flavor with zero sugar and a clean finish — the guilt-free pick for cherry fans who won't compromise on taste.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2022</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 800ms">
+                            <div class="tl-icon">
+                                <img src="images/pawpaw12pack.png" alt="Limited Editions" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">Limited Editions</h3>
+                                <p class="tl-text">Seasonal and limited-edition flavors — Pawpaw, Watermelon Strawberry, Blackberry, and more — keep the lineup fresh and regional.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2023</span>
+                        </div>
+
+                        <div class="tl-event" style="--tl-delay: 880ms">
+                            <div class="tl-icon">
+                                <img src="images/100yearswhitevar-removebg-preview.png" alt="100 Years" class="tl-img-contain">
+                            </div>
+                            <div class="tl-card">
+                                <h3 class="tl-title">100 Years Strong</h3>
+                                <p class="tl-text">A century of handcrafted ginger citrus soda, still family-owned, still made in Winchester, Kentucky — still A Late One.</p>
+                            </div>
+                            <div class="tl-stem"></div>
+                            <div class="tl-dot"></div>
+                            <span class="tl-year">2026</span>
+                        </div>
+
+                    </div>
+                </div>
+                <p class="timeline-coda">To this day, each batch is handcrafted using the same secret recipe passed down through four generations.</p>
+            </section>
+        </main>
+
+        <script>
+            const bottles = document.querySelectorAll('.bottle');
+            const infoPanel = document.querySelector('.info-panel');
+            const infoTitle = document.querySelector('.info-title');
+            const infoDescription = document.querySelector('.info-description');
+            const infoLabel = document.querySelector('.info-label');
+            let activeBottle = null;
+
+            const bottleData = {
+                original: {
+                    title: 'Original',
+                    label: 'Ale-8 One Original',
+                    description: 'The signature ginger citrus soda with real cane sugar, a peppery finish, and a balanced sweetness that made Ale-8 One famous.',
+                },
+                cherry: {
+                    title: 'Cherry',
+                    label: 'Ale-8 One Cherry',
+                    description: 'A smooth Cherry infusion with the same spice-forward sweetness of Original, delivering a rich cherry soda with the classic Ale-8 bite.',
+                },
+                orangezero: {
+                    title: 'Orange Cream',
+                    label: 'Ale-8 One Orange Cream',
+                    description: 'Bright orange flavor with Cream, crafted for a crisp citrus experience while preserving the brand’s signature ginger finish.',
+                },
+                blackcherry: {
+                    title: 'Black Cherry',
+                    label: 'Ale-8 One Black Cherry',
+                    description: 'Deep black cherry sweetness meets Ale-8’s spicy citrus blend for a darker, fruit-forward soda that stays true to the original character.',
+                },
+                zerosugar: {
+                    title: 'Zero Sugar',
+                    label: 'Ale-8 One Zero Sugar',
+                    description: 'The Original recipe reimagined without sugar, keeping the bold ginger, citrus, and spice in an ultra-refreshing zero-calorie format.',
+                },
+                cherryzero: {
+                    title: 'Cherry Zero',
+                    label: 'Ale-8 One Cherry Zero',
+                    description: 'Cherry flavor with zero sugar and a clean finish, giving you the same cherry Ale-8 profile in a lighter, diet-friendly package.',
+                }
+            };
+
+            function resetBottles() {
+                bottles.forEach(button => {
+                    button.classList.remove('active', 'shifted');
+                });
+                infoPanel.classList.add('hidden');
+                infoLabel.textContent = 'Select a bottle';
+                infoTitle.textContent = 'Ale-8 One Collection';
+                infoDescription.textContent = 'Click any bottle to expand it, move the stack, and reveal the product details in the panel.';
+                activeBottle = null;
+            }
+
+            function showBottle(bottleKey) {
+                const data = bottleData[bottleKey];
+                infoLabel.textContent = data.label;
+                infoTitle.textContent = data.title;
+                infoDescription.textContent = data.description;
+            }
+
+            bottles.forEach(button => {
+                button.addEventListener('click', () => {
+                    const selected = button.dataset.bottle;
+                    if (activeBottle === selected) {
+                        resetBottles();
+                        return;
+                    }
+
+                    activeBottle = selected;
+                    bottles.forEach(other => {
+                        if (other === button) {
+                            other.classList.add('active');
+                            other.classList.remove('shifted');
+                        } else {
+                            other.classList.remove('active');
+                            other.classList.add('shifted');
+                        }
+                    });
+
+                    infoPanel.classList.remove('hidden');
+                    showBottle(selected);
+                });
+            });
+
+            // Simple tab toggle behavior
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            // Timeline scroll-reveal
+            const tlObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        tlObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.tl-event, .timeline-coda').forEach(el => tlObserver.observe(el));
+        </script>
+    </body>
+</html>

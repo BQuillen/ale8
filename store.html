@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Store</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            .store-page {
+                padding: 40px 24px;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .store-intro {
+                text-align: center;
+                margin-bottom: 48px;
+                color: #333;
+            }
+
+            .store-intro h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 2.4rem;
+                color: #1b4f39;
+                margin-bottom: 12px;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+
+            .store-intro p {
+                font-size: 1.1rem;
+                color: #4a4a47;
+                max-width: 700px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            .category-heading {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.4rem;
+                color: #c21f1f;
+                text-transform: uppercase;
+                letter-spacing: 0.14em;
+                margin: 52px 0 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #c21f1f;
+            }
+
+            .product-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 28px;
+            }
+
+            .product-card {
+                background: rgba(255,255,255,0.95);
+                border-radius: 16px;
+                padding: 24px;
+                box-shadow: 0 8px 24px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+                transition: transform 300ms ease, box-shadow 300ms ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                text-decoration: none;
+                color: inherit;
+                cursor: pointer;
+            }
+
+            .product-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 16px 40px rgba(17,24,34,0.15);
+            }
+
+            .product-image {
+                width: 100%;
+                max-width: 200px;
+                height: 260px;
+                object-fit: contain;
+                object-position: center;
+                margin-bottom: 20px;
+                display: block;
+            }
+
+            .product-label {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: #195a43;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .product-title {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.3rem;
+                color: #1b4f39;
+                margin: 0 0 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+
+            .product-description {
+                font-size: 0.92rem;
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                flex-grow: 1;
+            }
+
+            .product-price {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.1rem;
+                color: #c21f1f;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .product-button {
+                background: #c21f1f;
+                color: white;
+                border: none;
+                padding: 12px 28px;
+                border-radius: 20px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background 220ms ease, transform 220ms ease;
+            }
+
+            .product-button:hover {
+                background: #a01a1a;
+                transform: scale(1.05);
+            }
+
+            /* Limited Time */
+            .limited-badge {
+                display: inline-block;
+                background: #c21f1f;
+                color: #fff;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.7rem;
+                font-weight: 700;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                padding: 4px 10px;
+                border-radius: 20px;
+                margin-bottom: 10px;
+            }
+
+            /* 6-Pack Builder */
+            .sixpack-builder {
+                background: rgba(255,255,255,0.97);
+                border-radius: 20px;
+                padding: 36px 32px;
+                box-shadow: 0 12px 36px rgba(17,24,34,0.12);
+                border: 2px solid #195a43;
+            }
+
+            .sixpack-header {
+                text-align: center;
+                margin-bottom: 28px;
+            }
+
+            .sixpack-header h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.8rem;
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 8px;
+            }
+
+            .sixpack-header p { color: #666; font-size: 0.95rem; }
+
+            .sixpack-counter {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                margin: 20px 0 32px;
+            }
+
+            .counter-pips { display: flex; gap: 6px; }
+
+            .pip {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #dde8e4;
+                transition: background 220ms ease, transform 220ms ease;
+            }
+
+            .pip.filled { background: #195a43; transform: scale(1.1); }
+
+            .counter-label {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #195a43;
+                min-width: 80px;
+                text-align: left;
+            }
+
+            .flavor-rows {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 16px;
+                margin-bottom: 32px;
+            }
+
+            .flavor-row {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                background: #f7f6f2;
+                border-radius: 12px;
+                padding: 12px 16px;
+                border: 2px solid transparent;
+                transition: border-color 200ms;
+            }
+
+            .flavor-row.has-qty { border-color: #195a43; background: #f0f7f4; }
+
+            .flavor-thumb {
+                width: 52px;
+                height: 52px;
+                object-fit: contain;
+                flex-shrink: 0;
+            }
+
+            .flavor-name {
+                flex: 1;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.95rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: #1b4f39;
+            }
+
+            .qty-controls {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .qty-btn {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                border: 2px solid #dde8e4;
+                background: #fff;
+                color: #1b4f39;
+                font-size: 1.1rem;
+                line-height: 1;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: border-color 160ms, background 160ms;
+                font-weight: 700;
+            }
+
+            .qty-btn:hover:not(:disabled) { border-color: #195a43; background: #f0f7f4; }
+            .qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+            .qty-count {
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+                color: #1b4f39;
+                min-width: 20px;
+                text-align: center;
+            }
+
+            .sixpack-cta { text-align: center; }
+
+            .sixpack-btn {
+                padding: 14px 36px;
+                border-radius: 999px;
+                background: #c21f1f;
+                color: #fff;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                border: none;
+                cursor: pointer;
+                transition: background 220ms, transform 220ms;
+            }
+
+            .sixpack-btn:hover:not(:disabled) { background: #8f1414; transform: translateY(-2px); }
+            .sixpack-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+            .sixpack-note {
+                margin-top: 10px;
+                font-size: 0.85rem;
+                color: #888;
+            }
+
+            /* Cart badge */
+            .cart-badge {
+                text-align: center;
+                margin-bottom: 22px;
+            }
+
+            .section-button {
+                background: #195a43;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 24px;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                text-decoration: none;
+                transition: background 220ms ease, transform 220ms ease;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .section-button:hover { background: #143d2c; transform: translateY(-1px); }
+
+            .cart-count { font-size: 0.85rem; opacity: 0.9; }
+
+            .cart-toast {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: #195a43;
+                color: #fff;
+                padding: 14px 18px;
+                border-radius: 14px;
+                box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+                z-index: 50;
+                opacity: 0;
+                transform: translateY(12px);
+                transition: opacity 220ms ease, transform 220ms ease;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                letter-spacing: 0.06em;
+                max-width: 280px;
+            }
+
+            .cart-toast.visible { opacity: 1; transform: translateY(0); }
+
+            @media (max-width: 700px) {
+                .store-page { padding: 24px 16px; }
+                .store-intro h2 { font-size: 1.8rem; }
+                .product-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+                .product-image { height: 200px; }
+                .sixpack-builder { padding: 24px 18px; }
+                .flavor-rows { grid-template-columns: 1fr; }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Order Bottles</p>
+                <div class="cart-badge">
+                    <a href="cart.html" class="section-button">View Cart <span class="cart-count" id="cartCount">(0)</span></a>
+                </div>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab active" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="store-page">
+                <section class="store-intro">
+                    <h2>Ale-8 One Bottles</h2>
+                    <p>Order your favorite Ale-8 One flavors — by the bottle, by the 12-pack, or build your own assorted 6-pack below.</p>
+                </section>
+
+                <!-- Single Bottles -->
+                <h2 class="category-heading">Single Bottles</h2>
+                <div class="product-grid">
+                    <a href="bottlepages/original.html" class="product-card" data-id="original-bottle" data-price="1.99">
+                        <img src="images/Orginal.png" alt="Ale-8 One Original" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Original</h3>
+                        <p class="product-description">The signature ginger citrus soda with real cane sugar, a peppery finish, and the balanced sweetness that made Ale-8 One famous.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                    <a href="bottlepages/cherry.html" class="product-card" data-id="cherry-bottle" data-price="1.99">
+                        <img src="images/cherry.png" alt="Ale-8 One Cherry" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Cherry</h3>
+                        <p class="product-description">A smooth cherry infusion with the same spice-forward sweetness of Original — rich cherry soda with the classic Ale-8 bite.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                    <a href="bottlepages/orangecream.html" class="product-card" data-id="orangecream-bottle" data-price="1.99">
+                        <img src="images/orangecream.png" alt="Ale-8 One Orange Cream" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Orange Cream</h3>
+                        <p class="product-description">Bright orange flavor with a creamy finish, crafted for a crisp citrus experience while preserving the brand's signature ginger bite.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                    <a href="bottlepages/blackcherry.html" class="product-card" data-id="blackcherry-bottle" data-price="1.99">
+                        <img src="images/blackcherry.png" alt="Ale-8 One Black Cherry" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Black Cherry</h3>
+                        <p class="product-description">Deep black cherry sweetness meets Ale-8's spicy citrus blend for a darker, fruit-forward soda true to the original character.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                    <a href="bottlepages/zerosugar.html" class="product-card" data-id="zerosugar-bottle" data-price="1.99">
+                        <img src="images/zerosugar.png" alt="Ale-8 One Zero Sugar" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Zero Sugar</h3>
+                        <p class="product-description">The Original recipe reimagined without sugar — bold ginger, citrus, and spice in an ultra-refreshing zero-calorie format.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                    <a href="bottlepages/cherryzero.html" class="product-card" data-id="cherryzero-bottle" data-price="1.99">
+                        <img src="images/cherryzero.png" alt="Ale-8 One Cherry Zero" class="product-image">
+                        <p class="product-label">Ale-8 One</p>
+                        <h3 class="product-title">Cherry Zero</h3>
+                        <p class="product-description">Cherry flavor with zero sugar and a clean finish — the same cherry Ale-8 profile in a lighter, diet-friendly package.</p>
+                        <p class="product-price">$1.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </a>
+                </div>
+
+                <!-- 12-Packs -->
+                <h2 class="category-heading">12-Packs</h2>
+                <div class="product-grid">
+                    <div class="product-card" data-id="original-12pack" data-price="14.99">
+                        <img src="images/12packorginal.png" alt="Ale-8 Original 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Original</h3>
+                        <p class="product-description">A full dozen of the original ginger citrus soda that started it all. Real cane sugar, bold ginger bite — stocked and ready to go.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="cherry-12pack" data-price="14.99">
+                        <img src="images/cherry12pack.png" alt="Ale-8 Cherry 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Cherry</h3>
+                        <p class="product-description">Twelve bottles of smooth Cherry Ale-8 — sweet, spiced, and ready to share. Perfect for stocking the fridge for the whole crew.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="orangecream-12pack" data-price="14.99">
+                        <img src="images/orangecream12pack.png" alt="Ale-8 Orange Cream 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Orange Cream</h3>
+                        <p class="product-description">Stock up on the fan-favorite Orange Cream. Twelve bottles of bright citrus and creamy finish — easy to love, hard to stop at one.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="blackcherry-12pack" data-price="14.99">
+                        <img src="images/blackberry12pack.png" alt="Ale-8 Black Cherry 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Black Cherry</h3>
+                        <p class="product-description">A dozen bottles of bold Black Cherry. Deep fruit flavor with Ale-8's signature spice — a 12-pack for those who like it dark.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="zerosugar-12pack" data-price="14.99">
+                        <img src="images/zerosugar12pack.png" alt="Ale-8 Zero Sugar 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Zero Sugar</h3>
+                        <p class="product-description">Twelve zero-sugar Ale-8s for guilt-free stocking. All the ginger citrus flavor, none of the sugar. Ideal for everyday drinking.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="cherryzero-12pack" data-price="14.99">
+                        <img src="images/cherryzero12pack.png" alt="Ale-8 Cherry Zero 12-Pack" class="product-image">
+                        <p class="product-label">12-Pack</p>
+                        <h3 class="product-title">Cherry Zero</h3>
+                        <p class="product-description">A full dozen Cherry Zero bottles — the zero-sugar cherry experience in bulk. Light, refreshing, and ready whenever you are.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Assorted 6-Pack Builder -->
+                <h2 class="category-heading">Build Your Assorted 6-Pack</h2>
+                <div class="sixpack-builder">
+                    <div class="sixpack-header">
+                        <h3>Mix &amp; Match Your 6-Pack</h3>
+                        <p>Pick any combination of flavors — up to 6 bottles total. $9.99</p>
+                    </div>
+
+                    <div class="sixpack-counter">
+                        <div class="counter-pips" id="pips">
+                            <div class="pip"></div><div class="pip"></div><div class="pip"></div>
+                            <div class="pip"></div><div class="pip"></div><div class="pip"></div>
+                        </div>
+                        <div class="counter-label" id="counterLabel">0 / 6</div>
+                    </div>
+
+                    <div class="flavor-rows" id="flavorRows">
+                        <div class="flavor-row" data-flavor="original">
+                            <img src="images/Orginal.png" alt="Original" class="flavor-thumb">
+                            <span class="flavor-name">Original</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Original">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Original">+</button>
+                            </div>
+                        </div>
+                        <div class="flavor-row" data-flavor="cherry">
+                            <img src="images/cherry.png" alt="Cherry" class="flavor-thumb">
+                            <span class="flavor-name">Cherry</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Cherry">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Cherry">+</button>
+                            </div>
+                        </div>
+                        <div class="flavor-row" data-flavor="orangecream">
+                            <img src="images/orangecream.png" alt="Orange Cream" class="flavor-thumb">
+                            <span class="flavor-name">Orange Cream</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Orange Cream">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Orange Cream">+</button>
+                            </div>
+                        </div>
+                        <div class="flavor-row" data-flavor="blackcherry">
+                            <img src="images/blackcherry.png" alt="Black Cherry" class="flavor-thumb">
+                            <span class="flavor-name">Black Cherry</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Black Cherry">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Black Cherry">+</button>
+                            </div>
+                        </div>
+                        <div class="flavor-row" data-flavor="zerosugar">
+                            <img src="images/zerosugar.png" alt="Zero Sugar" class="flavor-thumb">
+                            <span class="flavor-name">Zero Sugar</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Zero Sugar">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Zero Sugar">+</button>
+                            </div>
+                        </div>
+                        <div class="flavor-row" data-flavor="cherryzero">
+                            <img src="images/cherryzero.png" alt="Cherry Zero" class="flavor-thumb">
+                            <span class="flavor-name">Cherry Zero</span>
+                            <div class="qty-controls">
+                                <button class="qty-btn dec-btn" aria-label="Remove Cherry Zero">−</button>
+                                <span class="qty-count">0</span>
+                                <button class="qty-btn inc-btn" aria-label="Add Cherry Zero">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sixpack-cta">
+                        <button class="sixpack-btn" id="sixpackBtn" disabled>Select 6 Bottles to Continue</button>
+                        <p class="sixpack-note" id="sixpackNote">Choose your 6 flavors above, then add to cart.</p>
+                    </div>
+                </div>
+
+                <!-- Limited Time -->
+                <h2 class="category-heading">Limited Time</h2>
+                <div class="product-grid">
+                    <div class="product-card" data-id="pawpaw-12pack" data-price="14.99">
+                        <img src="images/pawpaw12pack.png" alt="Ale-8 Pawpaw 12-Pack" class="product-image">
+                        <span class="limited-badge">Limited Time</span>
+                        <p class="product-label">Seasonal Flavor</p>
+                        <h3 class="product-title">Pawpaw</h3>
+                        <p class="product-description">A rare taste of Appalachia — Ale-8's take on the native pawpaw fruit. Tropical, custard-sweet, with that signature ginger finish. Get it while it lasts.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="watermelonstrawberry-12pack" data-price="14.99">
+                        <img src="images/watermelonstrawberry12pack.png" alt="Ale-8 Watermelon Strawberry 12-Pack" class="product-image" style="transform: scale(1.18);">
+                        <span class="limited-badge">Limited Time</span>
+                        <p class="product-label">Seasonal Flavor</p>
+                        <h3 class="product-title">Watermelon Strawberry</h3>
+                        <p class="product-description">Juicy summer watermelon meets the iconic Ale-8 ginger bite. Refreshing, sweet, and built for hot Kentucky afternoons. Limited stock only.</p>
+                        <p class="product-price">$14.99</p>
+                        <button class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
+
+        <script src="cart.js"></script>
+        <script>
+            const cartCountEl = document.getElementById('cartCount');
+            const cartToast   = document.getElementById('cartToast');
+            let toastTimer;
+
+            function refreshCount() {
+                const n = Cart.getCount();
+                cartCountEl.textContent = `(${n})`;
+            }
+
+            function showToast(msg) {
+                cartToast.textContent = msg;
+                cartToast.classList.add('visible');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => cartToast.classList.remove('visible'), 2400);
+            }
+
+            // Tab toggle
+            document.querySelectorAll('.tab').forEach(t => {
+                t.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            // Product card Add to Cart buttons
+            document.querySelectorAll('.product-card .product-button').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const card = btn.closest('[data-id]');
+                    if (!card) return;
+
+                    const imgEl = card.querySelector('img.product-image');
+                    const image = imgEl ? imgEl.src : 'images/ale8logo.png';
+
+                    Cart.addItem({
+                        id:    card.dataset.id,
+                        name:  card.querySelector('.product-title').textContent.trim(),
+                        label: card.querySelector('.product-label').textContent.trim(),
+                        price: parseFloat(card.dataset.price),
+                        image: image
+                    });
+
+                    refreshCount();
+                    showToast(`Added to cart — ${Cart.getCount()} item${Cart.getCount() === 1 ? '' : 's'}`);
+
+                    const orig = btn.textContent;
+                    btn.textContent = 'Added!';
+                    btn.style.background = '#195a43';
+                    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1800);
+                });
+            });
+
+            // 6-Pack Builder
+            const MAX = 6;
+            const quantities = {};
+            const flavorNames = {
+                original: 'Original', cherry: 'Cherry', orangecream: 'Orange Cream',
+                blackcherry: 'Black Cherry', zerosugar: 'Zero Sugar', cherryzero: 'Cherry Zero'
+            };
+            const pips        = document.querySelectorAll('.pip');
+            const counterLabel = document.getElementById('counterLabel');
+            const sixpackBtn   = document.getElementById('sixpackBtn');
+            const sixpackNote  = document.getElementById('sixpackNote');
+
+            function getTotal() { return Object.values(quantities).reduce((s, v) => s + v, 0); }
+
+            function updateUI() {
+                const total = getTotal();
+                pips.forEach((pip, i) => pip.classList.toggle('filled', i < total));
+                counterLabel.textContent = `${total} / ${MAX}`;
+
+                document.querySelectorAll('.flavor-row').forEach(row => {
+                    const flavor = row.dataset.flavor;
+                    const qty = quantities[flavor] || 0;
+                    row.querySelector('.qty-count').textContent = qty;
+                    row.classList.toggle('has-qty', qty > 0);
+                    row.querySelector('.dec-btn').disabled = qty === 0;
+                    row.querySelector('.inc-btn').disabled = total >= MAX;
+                });
+
+                if (total === MAX) {
+                    sixpackBtn.disabled = false;
+                    sixpackBtn.textContent = 'Add 6-Pack to Cart — $9.99';
+                    sixpackNote.textContent = 'Your custom 6-pack is ready!';
+                } else {
+                    sixpackBtn.disabled = true;
+                    sixpackBtn.textContent = `Select ${MAX - total} More Bottle${MAX - total !== 1 ? 's' : ''} to Continue`;
+                    sixpackNote.textContent = 'Choose your 6 flavors above, then add to cart.';
+                }
+            }
+
+            document.querySelectorAll('.flavor-row').forEach(row => {
+                const flavor = row.dataset.flavor;
+                quantities[flavor] = 0;
+                row.querySelector('.inc-btn').addEventListener('click', () => {
+                    if (getTotal() < MAX) { quantities[flavor]++; updateUI(); }
+                });
+                row.querySelector('.dec-btn').addEventListener('click', () => {
+                    if (quantities[flavor] > 0) { quantities[flavor]--; updateUI(); }
+                });
+            });
+
+            sixpackBtn.addEventListener('click', () => {
+                if (sixpackBtn.disabled) return;
+                const note = Object.entries(quantities)
+                    .filter(([, qty]) => qty > 0)
+                    .map(([f, qty]) => `${qty}× ${flavorNames[f]}`)
+                    .join(', ');
+
+                Cart.addItem({
+                    id:    'custom-6pack',
+                    name:  'Custom 6-Pack',
+                    label: 'Mix & Match',
+                    price: 9.99,
+                    image: 'images/Orginal.png',
+                    note:  note
+                });
+
+                refreshCount();
+                showToast(`Custom 6-Pack added to cart!`);
+
+                sixpackBtn.textContent = 'Added to Cart!';
+                sixpackBtn.style.background = '#195a43';
+                setTimeout(() => {
+                    sixpackBtn.textContent = 'Add 6-Pack to Cart — $9.99';
+                    sixpackBtn.style.background = '';
+                    // Reset quantities
+                    Object.keys(quantities).forEach(k => quantities[k] = 0);
+                    updateUI();
+                }, 2000);
+            });
+
+            updateUI();
+            refreshCount();
+        </script>
+    </body>
+</html>

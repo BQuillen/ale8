@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Factory & Tours</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            /* ── Page intro banner ── */
+            .factory-intro {
+                text-align: center;
+                padding: 52px 24px 40px;
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+            }
+
+            .factory-intro h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.8rem, 4vw, 2.8rem);
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 10px;
+            }
+
+            .factory-intro p {
+                font-size: 1.05rem;
+                color: rgba(255,255,255,0.75);
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            /* ── Content wrapper ── */
+            .about-content {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 56px 24px 80px;
+            }
+
+            /* ── Reveal animation ── */
+            .reveal {
+                opacity: 0;
+                transform: translateY(28px);
+                transition: opacity 580ms ease, transform 580ms ease;
+            }
+
+            .reveal.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* ── Section header (matches rest of site) ── */
+            .section-header {
+                display: flex;
+                align-items: baseline;
+                gap: 18px;
+                margin-bottom: 32px;
+                border-bottom: 3px solid #c21f1f;
+                padding-bottom: 14px;
+            }
+
+            .section-header h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.5rem, 3vw, 2rem);
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin: 0;
+            }
+
+            /* ── Factory split ── */
+            .factory-split {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 52px;
+                align-items: center;
+                margin-bottom: 72px;
+            }
+
+            .factory-split p {
+                font-size: 1rem;
+                line-height: 1.85;
+                color: #333;
+                margin: 0 0 16px;
+            }
+
+            .factory-split p:last-child {
+                margin-bottom: 0;
+            }
+
+            .factory-img {
+                width: 100%;
+                border-radius: 18px;
+                box-shadow: 0 16px 40px rgba(17,24,34,0.18);
+                display: block;
+                object-fit: cover;
+            }
+
+            /* ── Stat badges ── */
+            .stat-row {
+                display: flex;
+                gap: 20px;
+                margin-top: 28px;
+                flex-wrap: wrap;
+            }
+
+            .stat-badge {
+                flex: 1 1 120px;
+                background: linear-gradient(135deg, #1b4f39, #143d2c);
+                color: #fff;
+                border-radius: 14px;
+                padding: 18px 16px;
+                text-align: center;
+            }
+
+            .stat-badge .stat-num {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.8rem;
+                font-weight: 700;
+                line-height: 1;
+                color: #ffffff;
+                display: block;
+            }
+
+            .stat-badge .stat-label {
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                color: rgba(255,255,255,0.7);
+                display: block;
+                margin-top: 5px;
+            }
+
+            /* ── What to expect cards ── */
+            .expect-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 22px;
+                margin-bottom: 72px;
+            }
+
+            .expect-card {
+                background: #ffffff;
+                border-radius: 18px;
+                padding: 28px 22px;
+                box-shadow: 0 8px 28px rgba(17,24,34,0.09);
+                border: 1px solid rgba(0,0,0,0.04);
+                text-align: center;
+            }
+
+            .expect-icon {
+                width: 76px;
+                height: 76px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1b4f39 0%, #143d2c 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px;
+                overflow: hidden;
+            }
+
+            .expect-icon img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .expect-icon img.icon-contain {
+                width: 78%;
+                height: 78%;
+                object-fit: contain;
+            }
+
+            .expect-card h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #1b4f39;
+                margin: 0 0 10px;
+            }
+
+            .expect-card p {
+                font-size: 0.88rem;
+                line-height: 1.7;
+                color: #555;
+                margin: 0;
+            }
+
+            /* ── Visit info band ── */
+            .visit-band {
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+                border-radius: 20px;
+                padding: 40px 40px;
+                margin-bottom: 72px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 32px;
+                text-align: center;
+            }
+
+            .visit-item h4 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.14em;
+                color: #c21f1f;
+                margin: 0 0 8px;
+            }
+
+            .visit-item p {
+                font-size: 0.9rem;
+                color: rgba(255,255,255,0.85);
+                margin: 0;
+                line-height: 1.6;
+            }
+
+            /* ── Tour Form ── */
+            .tour-form-wrap {
+                background: #ffffff;
+                border-radius: 22px;
+                box-shadow: 0 18px 50px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+                overflow: hidden;
+            }
+
+            .tour-form-head {
+                background: linear-gradient(160deg, #1b4f39 0%, #143d2c 100%);
+                padding: 32px 40px;
+            }
+
+            .tour-form-head h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 6px;
+            }
+
+            .tour-form-head p {
+                font-size: 0.92rem;
+                color: rgba(255,255,255,0.72);
+                margin: 0;
+            }
+
+            .tour-form-body {
+                padding: 36px 40px;
+            }
+
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+                margin-bottom: 18px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .form-group.full {
+                grid-column: 1 / -1;
+            }
+
+            .form-group label {
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                color: #1b4f39;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 11px 14px;
+                border: 2px solid rgba(0,0,0,0.1);
+                border-radius: 10px;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 0.95rem;
+                color: #1f2d2b;
+                background: #f7f6f2;
+                outline: none;
+                transition: border-color 180ms ease, background 180ms ease;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                border-color: #1b4f39;
+                background: #ffffff;
+            }
+
+            .form-group input.error,
+            .form-group select.error,
+            .form-group textarea.error {
+                border-color: #c21f1f;
+            }
+
+            .field-error {
+                font-size: 0.74rem;
+                color: #c21f1f;
+                margin: 0;
+                min-height: 1em;
+            }
+
+            .form-group textarea {
+                resize: vertical;
+                min-height: 100px;
+            }
+
+            .form-submit-row {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                margin-top: 28px;
+            }
+
+            .btn-submit {
+                padding: 13px 36px;
+                background: #c21f1f;
+                color: #ffffff;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                border: none;
+                border-radius: 999px;
+                cursor: pointer;
+                transition: background 200ms ease, transform 200ms ease;
+            }
+
+            .btn-submit:hover {
+                background: #8f1414;
+                transform: translateY(-2px);
+            }
+
+            .form-note {
+                font-size: 0.78rem;
+                color: #888;
+                line-height: 1.5;
+            }
+
+            /* ── Success state ── */
+            .form-success {
+                display: none;
+                text-align: center;
+                padding: 48px 40px;
+            }
+
+            .form-success.show {
+                display: block;
+            }
+
+            .success-icon {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1b4f39 0%, #143d2c 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                margin: 0 auto 20px;
+            }
+
+            .form-success h3 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.6rem;
+                color: #1b4f39;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin: 0 0 12px;
+            }
+
+            .form-success p {
+                font-size: 0.95rem;
+                color: #555;
+                line-height: 1.7;
+                max-width: 480px;
+                margin: 0 auto;
+            }
+
+            /* ── Responsive ── */
+            @media (max-width: 900px) {
+                .factory-split { grid-template-columns: 1fr; gap: 32px; }
+                .expect-grid { grid-template-columns: 1fr 1fr; }
+                .visit-band { grid-template-columns: 1fr; gap: 24px; padding: 32px 24px; }
+                .tour-form-head, .tour-form-body { padding: 24px; }
+            }
+
+            @media (max-width: 600px) {
+                .about-content { padding: 36px 16px 60px; }
+                .expect-grid { grid-template-columns: 1fr; }
+                .form-row { grid-template-columns: 1fr; }
+                .stat-row { gap: 12px; }
+                .form-submit-row { flex-direction: column; align-items: flex-start; }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Factory & Tours</p>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab active" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <!-- Intro banner -->
+            <div class="factory-intro">
+                <h2>Where the Magic Happens</h2>
+                <p>Winchester, Kentucky — home of the only soft drink invented and still produced in the Bluegrass State.</p>
+            </div>
+
+            <div class="about-content">
+
+                <!-- Factory story -->
+                <div class="reveal" style="margin-bottom: 72px;">
+                    <div class="section-header">
+                        <h2>The Ale-8 Factory</h2>
+                    </div>
+                    <div class="factory-split">
+                        <div>
+                            <p>Located in Winchester, Kentucky, the Ale-8 bottling facility has been the beating heart of the brand since it moved to its iconic Carol Road home in 1965. What began as a small-town soda operation has grown into a regional institution — yet it remains family-owned, still hand-mixing the same secret ginger-citrus formula passed down through four generations of the Wainscott family.</p>
+                            <p>The facility is famous for its commitment to returnable glass bottles — a tradition most soft drink companies abandoned decades ago. Fans drive from across the state to swap their empties and pick up fresh cases straight from the source. Every batch that rolls off the line follows the same recipe Uncle Lee perfected in the 1920s.</p>
+                            <div class="stat-row">
+                                <div class="stat-badge">
+                                    <span class="stat-num">1926</span>
+                                    <span class="stat-label">Founded</span>
+                                </div>
+                                <div class="stat-badge">
+                                    <span class="stat-num">4th</span>
+                                    <span class="stat-label">Generation</span>
+                                </div>
+                                <div class="stat-badge">
+                                    <span class="stat-num">100+</span>
+                                    <span class="stat-label">Years Strong</span>
+                                </div>
+                                <div class="stat-badge">
+                                    <span class="stat-num">KY</span>
+                                    <span class="stat-label">Made Here</span>
+                                </div>
+                            </div>
+                        </div>
+                        <img src="images/Ale-8-one-bottling company.jpg" alt="Ale-8 One Bottling Facility in Winchester, Kentucky" class="factory-img">
+                    </div>
+                </div>
+
+                <!-- What to expect -->
+                <div class="reveal">
+                    <div class="section-header">
+                        <h2>What to Expect</h2>
+                    </div>
+                </div>
+                <div class="expect-grid" style="margin-bottom: 72px;">
+                    <div class="expect-card reveal">
+                        <div class="expect-icon">
+                            <img src="images/Ale-8-one-bottling company.jpg" alt="Ale-8 Bottling Line">
+                        </div>
+                        <h3>The Bottling Line</h3>
+                        <p>Watch the high-speed bottling line in action — from raw glass to capped, labeled bottles headed out the door. It's loud, fast, and deeply satisfying.</p>
+                    </div>
+                    <div class="expect-card reveal" style="transition-delay: 80ms">
+                        <div class="expect-icon">
+                            <img src="images/wainscott-portrait-removebg-preview.png" alt="G.L. Wainscott" class="icon-contain">
+                        </div>
+                        <h3>The Full Story</h3>
+                        <p>Hear the tale of G.L. Wainscott's European travels, the naming contest, and how a small Winchester company outlasted every competitor for a century.</p>
+                    </div>
+                    <div class="expect-card reveal" style="transition-delay: 160ms">
+                        <div class="expect-icon">
+                            <img src="images/ale8logo.png" alt="Ale-8 Gift Shop" class="icon-contain">
+                        </div>
+                        <h3>Gift Shop</h3>
+                        <p>Grab exclusive factory merchandise, fresh cases straight off the line, and the returnable glass bottles you can only get in Winchester.</p>
+                    </div>
+                </div>
+
+                <!-- Visit info -->
+                <div class="visit-band reveal">
+                    <div class="visit-item">
+                        <h4>Location</h4>
+                        <p>25 Carol Road<br>Winchester, KY 40391</p>
+                    </div>
+                    <div class="visit-item">
+                        <h4>Tour Hours</h4>
+                        <p>Monday – Friday<br>9 AM · 11 AM · 1 PM · 3 PM</p>
+                    </div>
+                    <div class="visit-item">
+                        <h4>Group Size</h4>
+                        <p>Up to 20 per tour<br>Ages 5 and up welcome</p>
+                    </div>
+                </div>
+
+                <!-- Tour signup form -->
+                <div class="tour-form-wrap reveal">
+                    <div class="tour-form-head">
+                        <h2>Reserve Your Factory Tour</h2>
+                        <p>Fill out the form and we'll confirm your spot within one business day.</p>
+                    </div>
+
+                    <div class="tour-form-body" id="formBody">
+                        <form id="tourForm" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Jane" autocomplete="given-name">
+                                    <p class="field-error" id="firstNameErr"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" placeholder="Smith" autocomplete="family-name">
+                                    <p class="field-error" id="lastNameErr"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" placeholder="jane@example.com" autocomplete="email">
+                                    <p class="field-error" id="emailErr"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+                                    <p class="field-error" id="phoneErr"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tourDate">Preferred Date *</label>
+                                    <input type="date" id="tourDate" name="tourDate">
+                                    <p class="field-error" id="tourDateErr"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tourTime">Preferred Time *</label>
+                                    <select id="tourTime" name="tourTime">
+                                        <option value="">Select a time…</option>
+                                        <option value="9:00 AM">9:00 AM</option>
+                                        <option value="11:00 AM">11:00 AM</option>
+                                        <option value="1:00 PM">1:00 PM</option>
+                                        <option value="3:00 PM">3:00 PM</option>
+                                    </select>
+                                    <p class="field-error" id="tourTimeErr"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="partySize">Party Size *</label>
+                                    <select id="partySize" name="partySize">
+                                        <option value="">Select size…</option>
+                                        <option value="1–2 people">1–2 people</option>
+                                        <option value="3–5 people">3–5 people</option>
+                                        <option value="6–10 people">6–10 people</option>
+                                        <option value="11–20 people">11–20 people</option>
+                                    </select>
+                                    <p class="field-error" id="partySizeErr"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="groupType">Group Type</label>
+                                    <select id="groupType" name="groupType">
+                                        <option value="">Select type…</option>
+                                        <option value="Family">Family</option>
+                                        <option value="School / Field Trip">School / Field Trip</option>
+                                        <option value="Corporate Group">Corporate Group</option>
+                                        <option value="Friends / Social">Friends / Social</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <p class="field-error"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label for="notes">Special Requests or Questions</label>
+                                    <textarea id="notes" name="notes" placeholder="Accessibility needs, dietary info, questions about the tour…"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-submit-row">
+                                <button type="submit" class="btn-submit">Reserve My Spot</button>
+                                <p class="form-note">We'll send a confirmation to your email within one business day.<br>Tours run Mon–Fri. Groups over 20 please call ahead.</p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-success" id="formSuccess">
+                        <div class="success-icon">✓</div>
+                        <h3>You're on the List!</h3>
+                        <p>Thanks for signing up. Your tour request has been sent to our team and we'll confirm your spot via email within one business day. We can't wait to show you around.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <script>
+            // Tab toggle
+            document.querySelectorAll('.tab').forEach(t => {
+                t.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            // Scroll reveal
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // Set date minimum to today
+            const dateInput = document.getElementById('tourDate');
+            const today = new Date();
+            // Skip weekends: advance to Monday if today is Sat or Sun
+            const dayOfWeek = today.getDay();
+            if (dayOfWeek === 0) today.setDate(today.getDate() + 1);
+            if (dayOfWeek === 6) today.setDate(today.getDate() + 2);
+            dateInput.min = today.toISOString().split('T')[0];
+
+            // Form validation + submit
+            const form = document.getElementById('tourForm');
+
+            function setError(inputId, errId, message) {
+                const input = document.getElementById(inputId);
+                const err = document.getElementById(errId);
+                if (message) {
+                    input.classList.add('error');
+                    err.textContent = message;
+                } else {
+                    input.classList.remove('error');
+                    err.textContent = '';
+                }
+            }
+
+            function validateForm() {
+                let valid = true;
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName  = document.getElementById('lastName').value.trim();
+                const email     = document.getElementById('email').value.trim();
+                const tourDate  = document.getElementById('tourDate').value;
+                const tourTime  = document.getElementById('tourTime').value;
+                const partySize = document.getElementById('partySize').value;
+
+                if (!firstName) { setError('firstName', 'firstNameErr', 'First name is required.'); valid = false; }
+                else setError('firstName', 'firstNameErr', '');
+
+                if (!lastName) { setError('lastName', 'lastNameErr', 'Last name is required.'); valid = false; }
+                else setError('lastName', 'lastNameErr', '');
+
+                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email) { setError('email', 'emailErr', 'Email address is required.'); valid = false; }
+                else if (!emailRe.test(email)) { setError('email', 'emailErr', 'Please enter a valid email.'); valid = false; }
+                else setError('email', 'emailErr', '');
+
+                if (!tourDate) { setError('tourDate', 'tourDateErr', 'Please choose a date.'); valid = false; }
+                else setError('tourDate', 'tourDateErr', '');
+
+                if (!tourTime) { setError('tourTime', 'tourTimeErr', 'Please choose a time.'); valid = false; }
+                else setError('tourTime', 'tourTimeErr', '');
+
+                if (!partySize) { setError('partySize', 'partySizeErr', 'Please select a party size.'); valid = false; }
+                else setError('partySize', 'partySizeErr', '');
+
+                return valid;
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!validateForm()) return;
+
+                const f = (id) => document.getElementById(id).value.trim();
+                const firstName = f('firstName');
+                const lastName  = f('lastName');
+                const email     = f('email');
+                const phone     = f('phone');
+                const tourDate  = f('tourDate');
+                const tourTime  = document.getElementById('tourTime').value;
+                const partySize = document.getElementById('partySize').value;
+                const groupType = document.getElementById('groupType').value;
+                const notes     = f('notes');
+
+                const subject = encodeURIComponent(`Factory Tour Request — ${firstName} ${lastName} on ${tourDate}`);
+                const body = encodeURIComponent(
+                    `FACTORY TOUR REQUEST\n` +
+                    `====================\n\n` +
+                    `Name:        ${firstName} ${lastName}\n` +
+                    `Email:       ${email}\n` +
+                    `Phone:       ${phone || 'Not provided'}\n\n` +
+                    `Date:        ${tourDate}\n` +
+                    `Time:        ${tourTime}\n` +
+                    `Party Size:  ${partySize}\n` +
+                    `Group Type:  ${groupType || 'Not specified'}\n\n` +
+                    `Notes:\n${notes || 'None'}\n`
+                );
+
+                window.location.href = `mailto:info@ale8one.com?subject=${subject}&body=${body}`;
+
+                // Show success state after a short delay
+                setTimeout(() => {
+                    document.getElementById('formBody').style.display = 'none';
+                    document.getElementById('formSuccess').classList.add('show');
+                }, 400);
+            });
+
+            // Clear error on input change
+            ['firstName','lastName','email','tourDate','tourTime','partySize'].forEach(id => {
+                const errId = id + 'Err';
+                const el = document.getElementById(id);
+                el.addEventListener('change', () => setError(id, errId, ''));
+                el.addEventListener('input',  () => setError(id, errId, ''));
+            });
+        </script>
+    </body>
+</html>

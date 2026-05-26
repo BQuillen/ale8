@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ale-8 Merchandise</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            .store-page {
+                padding: 40px 24px;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .store-intro {
+                text-align: center;
+                margin-bottom: 48px;
+            }
+
+            .store-intro h2 {
+                font-family: 'Oswald', sans-serif;
+                font-size: 2.4rem;
+                color: #1b4f39;
+                margin-bottom: 12px;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+
+            .store-intro p {
+                font-size: 1.1rem;
+                color: #4a4a47;
+                max-width: 700px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            .category-heading {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.4rem;
+                color: #c21f1f;
+                text-transform: uppercase;
+                letter-spacing: 0.14em;
+                margin: 48px 0 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #c21f1f;
+            }
+
+            .product-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 28px;
+            }
+
+            .product-card {
+                background: rgba(255,255,255,0.95);
+                border-radius: 16px;
+                padding: 24px;
+                box-shadow: 0 8px 24px rgba(17,24,34,0.1);
+                border: 1px solid rgba(0,0,0,0.05);
+                transition: transform 300ms ease, box-shadow 300ms ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                text-decoration: none;
+                color: inherit;
+                cursor: pointer;
+            }
+
+            .product-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 16px 40px rgba(17,24,34,0.15);
+            }
+
+            .product-icon {
+                width: 100%;
+                height: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                font-size: 4rem;
+                background: linear-gradient(135deg, #f0f7f4 0%, #e8f5f0 100%);
+                border: 1px solid rgba(25, 90, 67, 0.1);
+            }
+
+            .product-image {
+                width: 100%;
+                height: 220px;
+                object-fit: contain;
+                object-position: center;
+                margin-bottom: 20px;
+                display: block;
+            }
+
+            .product-label {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                color: #195a43;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .product-title {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.3rem;
+                color: #1b4f39;
+                margin: 0 0 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+
+            .product-description {
+                font-size: 0.92rem;
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                flex-grow: 1;
+            }
+
+            .product-price {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.1rem;
+                color: #c21f1f;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .product-button {
+                background: #c21f1f;
+                color: white;
+                border: none;
+                padding: 12px 28px;
+                border-radius: 20px;
+                font-family: 'Oswald', sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background 220ms ease, transform 220ms ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .product-button:hover {
+                background: #a01a1a;
+                transform: scale(1.05);
+            }
+
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 18px;
+                flex-wrap: wrap;
+            }
+
+            .section-header .category-heading {
+                margin: 0;
+                flex: 1 1 auto;
+            }
+
+            .section-button {
+                background: #195a43;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 24px;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                text-decoration: none;
+                transition: background 220ms ease, transform 220ms ease;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .section-button:hover {
+                background: #143d2c;
+                transform: translateY(-1px);
+            }
+
+            .cart-badge {
+                text-align: center;
+                margin-bottom: 22px;
+            }
+
+            .cart-badge .section-button {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .cart-count {
+                font-size: 0.85rem;
+                opacity: 0.9;
+            }
+
+            .cart-toast {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: #195a43;
+                color: #fff;
+                padding: 14px 18px;
+                border-radius: 14px;
+                box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+                z-index: 50;
+                opacity: 0;
+                transform: translateY(12px);
+                transition: opacity 220ms ease, transform 220ms ease;
+                font-family: 'Oswald', sans-serif;
+                font-size: 0.85rem;
+                letter-spacing: 0.06em;
+                max-width: 280px;
+            }
+
+            .cart-toast.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            @media (max-width: 700px) {
+                .store-page { padding: 24px; }
+                .store-intro h2 { font-size: 1.8rem; }
+                .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+                .product-icon { height: 140px; font-size: 3rem; }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero-header">
+                <div class="hero-top">
+                    <img src="images/ale8logo.png" alt="Ale-8 One Logo" class="hero-logo">
+                    <img src="images/100 years.png" alt="100 Years" class="hero-anniversary">
+                </div>
+                <p class="hero-subtitle">Ale-8 Merchandise</p>
+                <div class="cart-badge">
+                    <a href="cart.html" class="section-button">View Cart <span class="cart-count" id="cartCount">(0)</span></a>
+                </div>
+            </header>
+
+            <nav class="tab-bar" aria-label="Primary site sections">
+                <ul class="tab-list" role="tablist">
+                    <li role="presentation"><a href="index.html" role="tab" class="tab" data-tab="home">Home</a></li>
+                    <li role="presentation"><a href="about.html" role="tab" class="tab" data-tab="factory">Factory</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="merch.html" role="tab" class="tab active" data-tab="merch">Merchandise</a>
+                        <div class="dropdown-menu" aria-label="Merchandise sections">
+                            <a href="merch.html#apparel">Apparel</a>
+                            <a href="merch.html#drinkware">Drinkware</a>
+                            <a href="merch.html#bottle-openers">Bottle Openers</a>
+                            <a href="merch.html#prints">Prints</a>
+                            <a href="merch.html#general-merchandise">General Merchandise</a>
+                        </div>
+                    </li>
+                    <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
+                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                </ul>
+            </nav>
+
+            <div class="store-page">
+                <section class="store-intro">
+                    <h2>Ale-8 One Gear</h2>
+                    <p>Rep your favorite Kentucky soda with official Ale-8 One merchandise. From classic tees to drinkware and prints, there's something for every fan.</p>
+                </section>
+
+                <!-- Apparel -->
+                <div class="section-header">
+                    <h2 id="apparel" class="category-heading">Apparel</h2>
+                </div>
+                <div class="product-grid">
+                    <div class="product-card" data-id="classic-logo-tee" data-price="24.99">
+                        <img src="images/vintage tee.png" alt="Ale-8 Vintage Tee" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Classic Logo Tee</h3>
+                        <p class="product-description">Soft cotton tee featuring the iconic Ale-8 One logo. A Kentucky staple for any true fan of the original ginger soda.</p>
+                        <p class="product-price">$24.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="trucker-hat" data-price="28.99">
+                        <img src="images/truckerhat.png" alt="Ale-8 Trucker Hat" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Ale-8 Trucker Hat</h3>
+                        <p class="product-description">Classic mesh-back trucker hat with embroidered Ale-8 One branding. Snapback fit, one size fits all. Built for the Kentucky sun.</p>
+                        <p class="product-price">$28.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="straw-hat" data-price="32.99">
+                        <img src="images/strawhat.png" alt="Ale-8 Straw Hat" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Ale-8 Straw Hat</h3>
+                        <p class="product-description">Lightweight woven straw hat with Ale-8 branding. Perfect for outdoor festivals, summer cookouts, and tailgates under the Kentucky sky.</p>
+                        <p class="product-price">$32.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="hoodie" data-price="49.99">
+                        <img src="images/hoodie.png" alt="Ale-8 Hoodie" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Ale-8 Hoodie</h3>
+                        <p class="product-description">Heavyweight fleece hoodie with the Ale-8 One logo. Perfect for cool Kentucky evenings with a cold one in hand.</p>
+                        <p class="product-price">$49.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="black-cherry-tee" data-price="26.99">
+                        <img src="images/blackberryshirt.png" alt="Ale-8 Black Cherry Shirt" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Black Cherry Tee</h3>
+                        <p class="product-description">Bold black tee celebrating the Black Cherry flavor. Dark, fruit-forward, and unmistakably Ale-8. Soft cotton blend.</p>
+                        <p class="product-price">$26.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="squirrel-tee" data-price="26.99">
+                        <img src="images/squireltee.png" alt="Ale-8 Squirrel Tee" class="product-image">
+                        <p class="product-label">Apparel</p>
+                        <h3 class="product-title">Squirrel Tee</h3>
+                        <p class="product-description">Fan-favorite graphic tee featuring the Ale-8 squirrel mascot. A quirky Kentucky classic that turns heads wherever you go.</p>
+                        <p class="product-price">$26.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Drinkware -->
+                <div class="section-header">
+                    <h2 id="drinkware" class="category-heading">Drinkware</h2>
+                </div>
+                <div class="product-grid">
+                    <div class="product-card" data-id="pint-glass" data-price="14.99">
+                        <img src="images/ale8glasspint.PNG" alt="Ale-8 Glass Pint" class="product-image">
+                        <p class="product-label">Drinkware</p>
+                        <h3 class="product-title">Ale-8 Glass Pint</h3>
+                        <p class="product-description">16 oz. classic glass pint with the Ale-8 One logo. The proper vessel for enjoying your favorite ginger soda with style.</p>
+                        <p class="product-price">$14.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="strawberry-water-glass" data-price="19.99">
+                        <img src="images/strawberreywaterglass.PNG" alt="Ale-8 Strawberry Water Glass" class="product-image">
+                        <p class="product-label">Drinkware</p>
+                        <h3 class="product-title">Strawberry Water Glass</h3>
+                        <p class="product-description">Glassware inspired by Ale-8's bright strawberry summer flavor. Perfect for sipping soda, water, or an ice-cold mixer.</p>
+                        <p class="product-price">$19.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="koozie" data-price="7.99">
+                        <img src="images/koozie.png" alt="Ale-8 Koozie" class="product-image">
+                        <p class="product-label">Drinkware</p>
+                        <h3 class="product-title">Ale-8 Koozie</h3>
+                        <p class="product-description">Neoprene can koozie to keep your Ale-8 bottle cold and your hand dry. Fits standard 12 oz. bottles perfectly.</p>
+                        <p class="product-price">$7.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Bottle Openers -->
+                <div class="section-header">
+                    <h2 id="bottle-openers" class="category-heading">Bottle Openers</h2>
+                </div>
+                <div class="product-grid">
+                    <div class="product-card" data-id="keychain-opener" data-price="9.99">
+                        <img src="images/bottleopener.png" alt="Ale-8 Bottle Opener" class="product-image">
+                        <p class="product-label">Accessories</p>
+                        <h3 class="product-title">Keychain Bottle Opener</h3>
+                        <p class="product-description">Compact stainless steel bottle opener with the Ale-8 logo. Attaches to your keyring so you're always ready to crack one open.</p>
+                        <p class="product-price">$9.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="beverage-key" data-price="12.99">
+                        <img src="images/ale8onebeveragekey.PNG" alt="Ale-8 Beverage Key" class="product-image">
+                        <p class="product-label">Accessories</p>
+                        <h3 class="product-title">Ale-8 Beverage Key</h3>
+                        <p class="product-description">A handy beverage key for opening bottles and cans with Ale-8 style. Perfect for tailgates, parties, and keeping your favorite drinks close at hand.</p>
+                        <p class="product-price">$12.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Prints -->
+                <div class="section-header">
+                    <h2 id="prints" class="category-heading">Prints</h2>
+                </div>
+                <div class="product-grid">
+                    <div class="product-card" data-id="diamond-art" data-price="24.99">
+                        <img src="images/diamondart.png" alt="Ale-8 Diamond Art" class="product-image">
+                        <p class="product-label">Art &amp; Prints</p>
+                        <h3 class="product-title">Diamond Art Print</h3>
+                        <p class="product-description">Detailed diamond art featuring the Ale-8 bottle and vintage branding. Perfect for framing or adding a pop of soda-inspired color to any wall.</p>
+                        <p class="product-price">$24.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="derby-print" data-price="26.99">
+                        <img src="images/Ale-8-Derby-Print-Cricket-Press.jpg.avif" alt="Ale-8 Derby Print Cricket Press" class="product-image">
+                        <p class="product-label">Art &amp; Prints</p>
+                        <h3 class="product-title">Derby Print Cricket Press</h3>
+                        <p class="product-description">A bold Ale-8 Derby print featuring the cricket press motif. A unique collector's piece for fans of Kentucky racing and vintage soda art.</p>
+                        <p class="product-price">$26.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="vintage-poster" data-price="22.99" data-image="images/100yearswhitevar-removebg-preview.png">
+                        <div class="product-icon">🖼️</div>
+                        <p class="product-label">Art &amp; Prints</p>
+                        <h3 class="product-title">Vintage Ale-8 Poster</h3>
+                        <p class="product-description">Retro-style art print celebrating 100 years of Ale-8 One. Printed on heavyweight matte stock. 18" x 24". Ready to frame.</p>
+                        <p class="product-price">$22.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="kentucky-pride" data-price="18.99" data-image="images/ale8logo.png">
+                        <div class="product-icon">🗺️</div>
+                        <p class="product-label">Art &amp; Prints</p>
+                        <h3 class="product-title">Kentucky Pride Print</h3>
+                        <p class="product-description">Illustrated print featuring the Ale-8 bottle against a Kentucky backdrop. A must-have for any fan of the Bluegrass State's favorite soda.</p>
+                        <p class="product-price">$18.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- General Merchandise -->
+                <div class="section-header">
+                    <h2 id="general-merchandise" class="category-heading">General Merchandise</h2>
+                </div>
+                <div class="product-grid">
+                    <div class="product-card" data-id="hacky-sac" data-price="9.99">
+                        <img src="images/hackysac.png" alt="Ale-8 Hacky Sac" class="product-image">
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">Ale-8 Hacky Sac</h3>
+                        <p class="product-description">Official Ale-8 One hacky sac — keep the party going between rounds. A fun Kentucky keepsake and a great conversation starter.</p>
+                        <p class="product-price">$9.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="tote-bag" data-price="15.99" data-image="images/ale8logo.png">
+                        <div class="product-icon">🛍️</div>
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">Ale-8 Tote Bag</h3>
+                        <p class="product-description">Heavy-duty canvas tote with the Ale-8 One logo. Large enough for a 12-pack. Reusable, durable, and proudly Kentucky-made.</p>
+                        <p class="product-price">$15.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="sticker-bundle" data-price="6.99">
+                        <img src="images/100yearsstickerbundle.png" alt="Ale-8 100 Years Sticker Bundle" class="product-image">
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">100 Years Sticker Bundle</h3>
+                        <p class="product-description">Celebrate a century of Ale-8 with this limited-edition sticker bundle. Die-cut, weatherproof, and full of centennial pride.</p>
+                        <p class="product-price">$6.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="salsa" data-price="9.99">
+                        <img src="images/ale8salsa.PNG" alt="Ale-8 Salsa" class="product-image">
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">Ale-8 Salsa</h3>
+                        <p class="product-description">A zesty Ale-8-inspired salsa blend with a touch of ginger citrus heat. Great for game day, snacks, and any soda-loving spread.</p>
+                        <p class="product-price">$9.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="cryptid-stickers" data-price="6.99">
+                        <img src="images/cryptidstickerbundle.png" alt="Ale-8 Cryptid Sticker Bundle" class="product-image">
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">Cryptid Sticker Bundle</h3>
+                        <p class="product-description">Kentucky's most legendary creatures meet Ale-8 One in this fan-favorite cryptid sticker pack. Spooky, fun, and weatherproof.</p>
+                        <p class="product-price">$6.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                    <div class="product-card" data-id="gift-bundle" data-price="44.99" data-image="images/ale8logo.png">
+                        <div class="product-icon">📦</div>
+                        <p class="product-label">General</p>
+                        <h3 class="product-title">Gift Bundle</h3>
+                        <p class="product-description">The ultimate Ale-8 gift set — includes a pint glass, koozie, sticker pack, and a bottle opener. Packaged in a branded gift box.</p>
+                        <p class="product-price">$44.99</p>
+                        <button type="button" class="product-button">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
+
+        <script src="cart.js"></script>
+        <script>
+            const cartCountEl = document.getElementById('cartCount');
+            const cartToast   = document.getElementById('cartToast');
+            let toastTimer;
+
+            function refreshCount() {
+                const n = Cart.getCount();
+                cartCountEl.textContent = `(${n})`;
+            }
+
+            function showToast(msg) {
+                cartToast.textContent = msg;
+                cartToast.classList.add('visible');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => cartToast.classList.remove('visible'), 2400);
+            }
+
+            document.querySelectorAll('.product-button').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const card = btn.closest('[data-id]');
+                    if (!card) return;
+
+                    const imgEl = card.querySelector('img.product-image');
+                    const image = imgEl ? imgEl.src : (card.dataset.image || 'images/ale8logo.png');
+
+                    Cart.addItem({
+                        id:    card.dataset.id,
+                        name:  card.querySelector('.product-title').textContent.trim(),
+                        label: card.querySelector('.product-label').textContent.trim(),
+                        price: parseFloat(card.dataset.price),
+                        image: image
+                    });
+
+                    refreshCount();
+                    showToast(`Added to cart — ${Cart.getCount()} item${Cart.getCount() === 1 ? '' : 's'}`);
+
+                    const orig = btn.textContent;
+                    btn.textContent = 'Added!';
+                    btn.style.background = '#195a43';
+                    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1800);
+                });
+            });
+
+            document.querySelectorAll('.tab').forEach(t => {
+                t.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+            });
+
+            refreshCount();
+        </script>
+    </body>
+</html>
