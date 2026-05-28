@@ -181,6 +181,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+
     </style>
     </head>
     <body>
@@ -208,7 +209,14 @@
                         </div>
                     </li>
                     <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
-                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a>
+                        <div class="dropdown-menu" aria-label="Order Bottles sections">
+                            <a href="store.html#single-bottles">Single Bottles</a>
+                            <a href="store.html#build-six-pack">Build Your 6-Pack</a>
+                            <a href="store.html#limited-time">Limited Time</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
 
@@ -240,6 +248,11 @@
                             <p class="info-label">Select a bottle</p>
                             <h2 class="info-title">Ale-8 One Collection</h2>
                             <p class="info-description">Click any bottle to expand it, move the stack, and reveal the product details in the panel.</p>
+                            <div class="bottle-actions" id="bottleActions">
+                                <button class="ba-btn ba-btn-single" id="baBtnSingle">Add Single &mdash; $1.99</button>
+                                <button class="ba-btn ba-btn-pack" id="baBtnPack">Add 12-Pack &mdash; $14.99</button>
+                                <p class="ba-confirm" id="baConfirm"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -446,55 +459,86 @@
             </div>
         </div>
 
+        <script src="cart.js"></script>
         <script>
-            const bottles = document.querySelectorAll('.bottle');
-            const infoPanel = document.querySelector('.info-panel');
-            const infoTitle = document.querySelector('.info-title');
-            const infoDescription = document.querySelector('.info-description');
-            const infoLabel = document.querySelector('.info-label');
+            const bottles = document.querySelectorAll(`.bottle`);
+            const infoPanel = document.querySelector(`.info-panel`);
+            const infoTitle = document.querySelector(`.info-title`);
+            const infoDescription = document.querySelector(`.info-description`);
+            const infoLabel = document.querySelector(`.info-label`);
+            const bottleActions = document.getElementById(`bottleActions`);
+            const baBtnSingle = document.getElementById(`baBtnSingle`);
+            const baBtnPack = document.getElementById(`baBtnPack`);
+            const baConfirm = document.getElementById(`baConfirm`);
             let activeBottle = null;
+            let confirmTimer = null;
 
             const bottleData = {
                 original: {
-                    title: 'Original',
-                    label: 'Ale-8 One Original',
-                    description: 'The signature ginger citrus soda with real cane sugar, a peppery finish, and a balanced sweetness that made Ale-8 One famous.',
+                    title: "Original",
+                    label: "Ale-8 One Original",
+                    description: "The signature ginger citrus soda with real cane sugar, a peppery finish, and a balanced sweetness that made Ale-8 One famous.",
+                    id: "original-bottle",
+                    packId: "original-12pack",
+                    image: "images/Orginal.png",
                 },
                 cherry: {
-                    title: 'Cherry',
-                    label: 'Ale-8 One Cherry',
-                    description: 'A smooth Cherry infusion with the same spice-forward sweetness of Original, delivering a rich cherry soda with the classic Ale-8 bite.',
+                    title: "Cherry",
+                    label: "Ale-8 One Cherry",
+                    description: "A smooth Cherry infusion with the same spice-forward sweetness of Original, delivering a rich cherry soda with the classic Ale-8 bite.",
+                    id: "cherry-bottle",
+                    packId: "cherry-12pack",
+                    image: "images/cherry.png",
                 },
                 orangezero: {
-                    title: 'Orange Cream',
-                    label: 'Ale-8 One Orange Cream',
-                    description: 'Bright orange flavor with Cream, crafted for a crisp citrus experience while preserving the brand’s signature ginger finish.',
+                    title: "Orange Cream",
+                    label: "Ale-8 One Orange Cream",
+                    description: "Bright orange flavor with Cream, crafted for a crisp citrus experience while preserving the brand’s signature ginger finish.",
+                    id: "orangecream-bottle",
+                    packId: "orangecream-12pack",
+                    image: "images/orangecream.png",
                 },
                 blackberry: {
-                    title: 'Blackberry',
-                    label: 'Ale-8 One Blackberry',
-                    description: 'Deep blackberry sweetness meets Ale-8’s spicy citrus blend for a darker, fruit-forward soda that stays true to the original character.',
+                    title: "Blackberry",
+                    label: "Ale-8 One Blackberry",
+                    description: "Deep blackberry sweetness meets Ale-8’s spicy citrus blend for a darker, fruit-forward soda that stays true to the original character.",
+                    id: "blackcherry-bottle",
+                    packId: "blackcherry-12pack",
+                    image: "images/blackcherry.png",
                 },
                 zerosugar: {
-                    title: 'Zero Sugar',
-                    label: 'Ale-8 One Zero Sugar',
-                    description: 'The Original recipe reimagined without sugar, keeping the bold ginger, citrus, and spice in an ultra-refreshing zero-calorie format.',
+                    title: "Zero Sugar",
+                    label: "Ale-8 One Zero Sugar",
+                    description: "The Original recipe reimagined without sugar, keeping the bold ginger, citrus, and spice in an ultra-refreshing zero-calorie format.",
+                    id: "zerosugar-bottle",
+                    packId: "zerosugar-12pack",
+                    image: "images/zerosugar.png",
                 },
                 cherryzero: {
-                    title: 'Cherry Zero',
-                    label: 'Ale-8 One Cherry Zero',
-                    description: 'Cherry flavor with zero sugar and a clean finish, giving you the same cherry Ale-8 profile in a lighter, diet-friendly package.',
+                    title: "Cherry Zero",
+                    label: "Ale-8 One Cherry Zero",
+                    description: "Cherry flavor with zero sugar and a clean finish, giving you the same cherry Ale-8 profile in a lighter, diet-friendly package.",
+                    id: "cherryzero-bottle",
+                    packId: "cherryzero-12pack",
+                    image: "images/cherryzero.png",
                 }
             };
 
+            function flashConfirm(msg) {
+                baConfirm.innerHTML = msg + " &nbsp;<a href=\"cart.html\">View Cart &rarr;</a>";
+                baConfirm.classList.add("show");
+                clearTimeout(confirmTimer);
+                confirmTimer = setTimeout(() => baConfirm.classList.remove("show"), 3500);
+            }
+
             function resetBottles() {
-                bottles.forEach(button => {
-                    button.classList.remove('active', 'shifted');
-                });
-                infoPanel.classList.add('hidden');
-                infoLabel.textContent = 'Select a bottle';
-                infoTitle.textContent = 'Ale-8 One Collection';
-                infoDescription.textContent = 'Click any bottle to expand it, move the stack, and reveal the product details in the panel.';
+                bottles.forEach(button => button.classList.remove("active", "shifted"));
+                infoPanel.classList.add("hidden");
+                infoLabel.textContent = "Select a bottle";
+                infoTitle.textContent = "Ale-8 One Collection";
+                infoDescription.textContent = "Click any bottle to expand it, move the stack, and reveal the product details in the panel.";
+                bottleActions.classList.remove("visible");
+                baConfirm.classList.remove("show");
                 activeBottle = null;
             }
 
@@ -503,6 +547,9 @@
                 infoLabel.textContent = data.label;
                 infoTitle.textContent = data.title;
                 infoDescription.textContent = data.description;
+                bottleActions.dataset.key = bottleKey;
+                bottleActions.classList.add(`visible`);
+                baConfirm.classList.remove(`show`);
             }
 
             bottles.forEach(button => {
@@ -527,6 +574,21 @@
                     infoPanel.classList.remove('hidden');
                     showBottle(selected);
                 });
+            });
+
+            // Cart button handlers
+            baBtnSingle.addEventListener('click', () => {
+                const data = bottleData[bottleActions.dataset.key];
+                Cart.addItem({ id: data.id, name: data.title, label: data.label, price: 1.99, image: data.image, qty: 1 });
+                const n = Cart.getCount();
+                flashConfirm('Added to cart — ' + n + ' item' + (n === 1 ? '' : 's'));
+            });
+
+            baBtnPack.addEventListener('click', () => {
+                const data = bottleData[bottleActions.dataset.key];
+                Cart.addItem({ id: data.packId, name: data.title + ' 12-Pack', label: data.label + ' 12-Pack', price: 14.99, image: data.image, qty: 1 });
+                const n = Cart.getCount();
+                flashConfirm('Added to cart — ' + n + ' item' + (n === 1 ? '' : 's'));
             });
 
             // Simple tab toggle behavior
@@ -565,5 +627,6 @@
                 document.getElementById('extModal').classList.remove('active');
             }
         </script>
+        <script src="shared.js" defer></script>
     </body>
 </html>

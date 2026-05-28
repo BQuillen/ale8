@@ -267,7 +267,14 @@
                         </div>
                     </li>
                     <li role="presentation"><a href="recipes.html" role="tab" class="tab" data-tab="recipes">Recipes</a></li>
-                    <li role="presentation"><a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a></li>
+                    <li role="presentation" class="dropdown-tab">
+                        <a href="store.html" role="tab" class="tab" data-tab="store">Order Bottles</a>
+                        <div class="dropdown-menu" aria-label="Order Bottles sections">
+                            <a href="store.html#single-bottles">Single Bottles</a>
+                            <a href="store.html#build-six-pack">Build Your 6-Pack</a>
+                            <a href="store.html#limited-time">Limited Time</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
 
@@ -482,12 +489,39 @@
             </div>
         </main>
 
-        <footer class="site-footer site-footer--simple">
+        <footer class="site-footer">
+            <div class="footer-main">
+                <p class="footer-social-heading">Follow Ale-8 One</p>
+                <div class="footer-icons-wrap">
+                    <img src="socialiconsfooter.png" alt="Social media icons for Instagram, Facebook, X, TikTok, and YouTube" class="footer-social-img">
+                    <div class="footer-icon-links">
+                        <a href="#" class="footer-icon-link" aria-label="Instagram" onclick="openSocial(event,'https://www.instagram.com/ale8one')"></a>
+                        <a href="#" class="footer-icon-link" aria-label="Facebook" onclick="openSocial(event,'https://www.facebook.com/Ale8One')"></a>
+                        <a href="#" class="footer-icon-link" aria-label="X (Twitter)" onclick="openSocial(event,'https://x.com/Ale8One')"></a>
+                        <a href="#" class="footer-icon-link" aria-label="TikTok" onclick="openSocial(event,'https://www.tiktok.com/@ale8one')"></a>
+                        <a href="#" class="footer-icon-link" aria-label="YouTube" onclick="openSocial(event,'https://www.youtube.com/user/TheAle8One')"></a>
+                    </div>
+                </div>
+                <p class="footer-external-note">&#9432;&nbsp; Clicking a social icon will take you to an external website not controlled by Ale-8-Bottling Company.</p>
+            </div>
+            <hr class="footer-divider">
             <div class="footer-bottom">
                 <p class="footer-copyright">&copy; 2026 Ale-8-Bottling Company. All rights reserved.</p>
                 <p class="footer-credit">Site designed by Bennett Lanter</p>
             </div>
         </footer>
+
+        <div class="ext-modal-overlay" id="extModal" onclick="if(event.target===this)closeExtModal()">
+            <div class="ext-modal">
+                <div class="ext-modal-icon"><img src="images/ale8logo.png" alt="Ale-8 One" style="height:64px;width:auto;display:block;margin:0 auto;"></div>
+                <p class="ext-modal-title">Leaving Ale-8 One</p>
+                <p class="ext-modal-body">You're about to visit an external website not affiliated with or controlled by Ale-8-Bottling Company.</p>
+                <div class="ext-modal-actions">
+                    <button class="ext-btn ext-btn-cancel" onclick="closeExtModal()">Stay Here</button>
+                    <button class="ext-btn ext-btn-go" id="extModalGo">Continue</button>
+                </div>
+            </div>
+        </div>
 
         <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
 
@@ -544,6 +578,17 @@
             });
 
             refreshCount();
+
+            function openSocial(e, url) {
+                e.preventDefault();
+                const go = document.getElementById('extModalGo');
+                go.onclick = function() { window.open(url, '_blank', 'noopener,noreferrer'); closeExtModal(); };
+                document.getElementById('extModal').classList.add('active');
+            }
+            function closeExtModal() {
+                document.getElementById('extModal').classList.remove('active');
+            }
         </script>
+        <script src="shared.js" defer></script>
     </body>
 </html>

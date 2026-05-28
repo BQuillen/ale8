@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 html, body {
     margin: 0;
     min-height: 100%;
@@ -10,8 +14,83 @@ html, body {
     color: #1f2d2b;
 }
 
+/* Page entrance animation — opacity only, no transform, to avoid stacking-context side-effects */
+@keyframes ale8PageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 body {
     line-height: 1.5;
+    animation: ale8PageIn 0.35s ease-out both;
+}
+
+/* Focus ring */
+:focus-visible {
+    outline: 3px solid #c21f1f;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Scroll reveal system */
+.sr-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.sr-card.sr-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* Back-to-top button */
+.btt {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #1b4f39;
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(14px) scale(0.9);
+    transition: opacity 0.24s ease, transform 0.24s ease, background 0.18s, box-shadow 0.18s;
+    z-index: 800;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.24);
+    pointer-events: none;
+}
+
+.btt.btt--on {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+
+.btt:hover {
+    background: #143d2c;
+    box-shadow: 0 6px 26px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
+/* Scroll progress bar */
+.spb {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #c21f1f, #e63535);
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 9999;
+    pointer-events: none;
 }
 
 .page-shell {
@@ -122,40 +201,64 @@ body {
     position: relative;
 }
 
+/* Invisible bridge fills the gap so the mouse doesn't lose hover mid-travel */
+.dropdown-tab::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -10px;
+    right: -10px;
+    height: 14px;
+    pointer-events: none;
+}
+
 .dropdown-menu {
     position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    min-width: 220px;
-    display: none;
-    background: white;
-    border: 1px solid rgba(0,0,0,0.1);
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px) scale(0.95);
+    transform-origin: top center;
+    min-width: 210px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.09);
     border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(17,24,34,0.12);
-    padding: 8px 0;
-    z-index: 30;
+    box-shadow: 0 20px 44px rgba(17,24,34,0.16);
+    padding: 6px 0;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    /* delay on close so mouse can travel from tab into menu */
+    transition: opacity 200ms ease 80ms, transform 200ms ease 80ms;
 }
 
 .dropdown-tab:hover .dropdown-menu,
 .dropdown-tab:focus-within .dropdown-menu {
-    display: block;
+    opacity: 1;
+    transform: translateX(-50%);
+    pointer-events: auto;
+    transition-delay: 0ms;
 }
 
 .dropdown-menu a {
     display: block;
-    padding: 10px 18px;
+    padding: 12px 22px;
     color: #195a43;
     text-decoration: none;
     font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    transition: background 180ms ease;
+    transition: background 150ms ease, color 150ms ease;
+    white-space: nowrap;
 }
 
 .dropdown-menu a:hover {
-    background: rgba(194,31,31,0.08);
+    background: rgba(194,31,31,0.09);
+    color: #c21f1f;
 }
+
+.dropdown-menu a:first-child { border-radius: 10px 10px 0 0; }
+.dropdown-menu a:last-child  { border-radius: 0 0 10px 10px; }
 
 @media (max-width: 700px) {
     .tab-list { padding: 4px; gap: 8px; }
@@ -175,6 +278,66 @@ body {
     background-size: cover;
     background-position: center;
     box-shadow: 0 28px 70px rgba(17, 24, 34, 0.18);
+}
+
+/* ── Bottle add-to-cart buttons ── */
+.bottle-actions {
+    display: none;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 20px;
+}
+.bottle-actions.visible { display: flex; }
+
+.ba-btn {
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    border: 2px solid transparent;
+}
+.ba-btn:hover { transform: translateY(-2px); }
+.ba-btn:active { transform: translateY(0); }
+
+.ba-btn-single {
+    background: #1b4f39;
+    color: #fff;
+    border-color: #1b4f39;
+}
+.ba-btn-single:hover {
+    background: #143d2c;
+    box-shadow: 0 6px 18px rgba(20,61,44,0.3);
+}
+
+.ba-btn-pack {
+    background: transparent;
+    color: #1b4f39;
+    border-color: #1b4f39;
+}
+.ba-btn-pack:hover {
+    background: rgba(27,79,57,0.07);
+    box-shadow: 0 4px 14px rgba(20,61,44,0.15);
+}
+
+.ba-confirm {
+    font-size: 0.8rem;
+    color: #195a43;
+    font-weight: 600;
+    margin: 2px 0 0;
+    min-height: 1.3em;
+    opacity: 0;
+    transition: opacity 280ms ease;
+}
+.ba-confirm.show { opacity: 1; }
+.ba-confirm a {
+    color: #c21f1f;
+    text-decoration: underline;
+    margin-left: 6px;
 }
 
 .bottle-stack {
