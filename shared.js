@@ -1,5 +1,52 @@
 'use strict';
 
+/* ── Site theme toggle ── */
+(function () {
+    let storedTheme = null;
+    try {
+        storedTheme = localStorage.getItem('ale8Theme');
+    } catch (error) {}
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
+    document.documentElement.dataset.theme = initialTheme;
+
+    function init() {
+        const tabList = document.querySelector('.tab-list');
+        if (!tabList) return;
+
+        const item = document.createElement('li');
+        item.setAttribute('role', 'presentation');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Switch to dark mode');
+        button.setAttribute('title', 'Switch theme');
+        item.appendChild(button);
+        tabList.appendChild(item);
+
+        function updateButton() {
+            const isDark = document.documentElement.dataset.theme === 'dark';
+            button.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            button.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            button.innerHTML = isDark ? '&#9728;' : '&#9790;';
+        }
+
+        button.addEventListener('click', () => {
+            const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = nextTheme;
+            try {
+                localStorage.setItem('ale8Theme', nextTheme);
+            } catch (error) {}
+            updateButton();
+        });
+        updateButton();
+    }
+
+    document.readyState === 'loading'
+        ? document.addEventListener('DOMContentLoaded', init)
+        : init();
+})();
+
 /* ── Scroll-reveal for product & recipe cards ── */
 (function () {
     const obs = new IntersectionObserver((entries) => {

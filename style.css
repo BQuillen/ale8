@@ -2,6 +2,34 @@
     box-sizing: border-box;
 }
 
+:root {
+    color-scheme: light;
+    --page-bg: #faf9f4;
+    --surface: #ffffff;
+    --surface-muted: #f0f2e9;
+    --text: #24352f;
+    --text-muted: #59635d;
+    --green: #195a43;
+    --green-deep: #103d2e;
+    --accent: #c21f1f;
+    --line: rgba(25, 90, 67, 0.16);
+    --shadow: rgba(17, 24, 34, 0.14);
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --page-bg: #10251f;
+    --surface: #18372c;
+    --surface-muted: #143027;
+    --text: #f4f2e7;
+    --text-muted: #c3cec5;
+    --green: #dbe7b7;
+    --green-deep: #0b1f19;
+    --accent: #ef4a4a;
+    --line: rgba(219, 231, 183, 0.2);
+    --shadow: rgba(0, 0, 0, 0.32);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -10,8 +38,9 @@ html, body {
     margin: 0;
     min-height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f6f2;
-    color: #1f2d2b;
+    background: var(--page-bg);
+    color: var(--text);
+    transition: background-color 220ms ease, color 220ms ease;
 }
 
 /* Page entrance animation — opacity only, no transform, to avoid stacking-context side-effects */
@@ -23,6 +52,74 @@ html, body {
 body {
     line-height: 1.5;
     animation: ale8PageIn 0.35s ease-out both;
+}
+
+/* Homepage intro: the page stays still until the pour has finished. */
+.intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 18px;
+    overflow: hidden;
+    padding: 32px 24px;
+    background: linear-gradient(145deg, #fffdf7 0%, #dbe7b7 100%);
+    color: #195a43;
+    opacity: 1;
+    transition: opacity 520ms ease, visibility 520ms ease;
+}
+
+.intro-screen--closing {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.intro-active { overflow: hidden; }
+.intro-seen .intro-screen { display: none; }
+
+.intro-copy,
+.intro-bottle,
+.intro-skip { position: relative; z-index: 1; }
+
+.intro-copy { text-align: center; animation: introRise 700ms ease-out both; }
+.intro-logo { display: block; width: min(46vw, 230px); height: auto; margin: 0 auto 20px; }
+.intro-kicker,
+.intro-title { margin: 0; text-transform: uppercase; font-family: 'Oswald', sans-serif; }
+.intro-kicker { color: #c21f1f; font-size: 0.76rem; letter-spacing: 0.3em; }
+.intro-title { margin-top: 3px; font-size: clamp(2rem, 6vw, 3.5rem); letter-spacing: 0.1em; }
+
+.intro-bottle {
+    width: min(31vw, 150px);
+    min-width: 112px;
+    aspect-ratio: 0.333;
+    animation: introBottleRise 2200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.intro-bottle img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.intro-bottle img { z-index: 1; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(17, 24, 34, 0.25)); }
+.intro-skip { margin-top: 10px; padding: 8px 14px; border: 1px solid rgba(25,90,67,0.45); border-radius: 999px; background: transparent; color: #195a43; font: 0.72rem 'Oswald', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; opacity: 0.8; }
+.intro-skip:hover { background: rgba(25,90,67,0.1); opacity: 1; }
+
+@keyframes introBottleRise { from { transform: translateY(110vh); } to { transform: translateY(0); } }
+@keyframes introRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-screen, .intro-copy, .intro-bottle { animation: none; }
+}
+
+@media (max-width: 520px) {
+    .intro-screen { gap: 14px; }
+    .intro-logo { width: min(48vw, 170px); margin-bottom: 14px; }
+    .intro-bottle { width: 132px; }
 }
 
 /* Focus ring */
@@ -195,6 +292,27 @@ body {
     background: #c21f1f;
     color: #fff;
     box-shadow: 0 6px 18px rgba(194,31,31,0.18);
+}
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-muted);
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.theme-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: rotate(12deg) scale(1.05);
 }
 
 .dropdown-tab {
@@ -708,4 +826,71 @@ body {
 .ext-btn-go {
     background: #1b4f39;
     color: #fff;
+}
+
+/* Theme surfaces shared by the page-specific layouts. */
+html[data-theme="light"] .page-shell,
+html[data-theme="light"] .cart-bar {
+    background-color: var(--page-bg) !important;
+}
+
+html[data-theme="dark"] .page-shell,
+html[data-theme="dark"] .cart-bar,
+html[data-theme="dark"] .about-content,
+html[data-theme="dark"] .shop-page,
+html[data-theme="dark"] .store-page,
+html[data-theme="dark"] .recipes-page,
+html[data-theme="dark"] .merch-page,
+html[data-theme="dark"] .cart-page {
+    background-color: var(--page-bg) !important;
+    color: var(--text);
+}
+
+html[data-theme="dark"] .tab-list,
+html[data-theme="dark"] .dropdown-menu,
+html[data-theme="dark"] .info-card,
+html[data-theme="dark"] .product-card,
+html[data-theme="dark"] .recipe-card,
+html[data-theme="dark"] .merch-cat-card,
+html[data-theme="dark"] .cart-item,
+html[data-theme="dark"] .cart-summary,
+html[data-theme="dark"] .ext-modal {
+    background: var(--surface) !important;
+    color: var(--text);
+    border-color: var(--line);
+}
+
+html[data-theme="dark"] :is(.hero-subtitle, .info-label, .info-title, .info-description,
+.section-header h2, .factory-split p, .product-title, .product-name, .recipe-title,
+.recipe-card h3, .merch-cat-card h3, .cart-item-title, .cart-total, .ext-modal-title) {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] :is(.info-description, .factory-split p, .product-description,
+.recipe-card p, .merch-cat-card p, .cart-item-meta, .ext-modal-body) {
+    color: var(--text-muted) !important;
+}
+
+html[data-theme="dark"] :is(.tab, .dropdown-menu a, .info-label, .section-header h2,
+.hero-subtitle, .cart-bar-btn, .cart-empty a) {
+    color: var(--green) !important;
+}
+
+html[data-theme="dark"] :is(.tab.active, .tab:hover:not(.active),
+.cart-checkout, .banner-btn-primary, .ext-btn-go) {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: #fff !important;
+}
+
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] :is(.factory-intro, .shop-banner, .store-banner, .recipes-banner,
+.merch-banner, .cart-header) {
+    background: linear-gradient(160deg, #183f31 0%, #0b211a 100%) !important;
+}
+
+html[data-theme="dark"] :is(input, select, textarea) {
+    background: var(--surface-muted);
+    color: var(--text);
+    border-color: var(--line);
 }

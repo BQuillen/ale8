@@ -184,7 +184,26 @@
 
     </style>
     </head>
-    <body>
+    <body class="intro-active">
+        <script>
+            try {
+                if (sessionStorage.getItem(`ale8IntroSeen`) === `true`) {
+                    document.body.classList.add(`intro-seen`);
+                    document.body.classList.remove(`intro-active`);
+                }
+            } catch (error) {}
+        </script>
+        <div class="intro-screen" id="introScreen" role="dialog" aria-label="Ale-8 One intro" aria-modal="true">
+            <div class="intro-copy">
+                <img src="images/100 years.png" alt="100 Years of Ale-8 One" class="intro-logo">
+                <p class="intro-kicker">Since 1926</p>
+                <p class="intro-title">A Late One</p>
+            </div>
+            <div class="intro-bottle" aria-hidden="true">
+                <img src="images/Orginal.png" alt="">
+            </div>
+            <button type="button" class="intro-skip" id="introSkip">Skip intro</button>
+        </div>
         <main class="page-shell">
             <header class="hero-header">
                 <div class="hero-top">
@@ -473,6 +492,25 @@
             const baConfirm = document.getElementById(`baConfirm`);
             let activeBottle = null;
             let confirmTimer = null;
+
+            const introScreen = document.getElementById(`introScreen`);
+            const introSkip = document.getElementById(`introSkip`);
+            let introClosed = false;
+
+            function closeIntro() {
+                if (introClosed) return;
+                introClosed = true;
+                try {
+                    sessionStorage.setItem(`ale8IntroSeen`, `true`);
+                } catch (error) {}
+                document.body.classList.remove(`intro-active`);
+                introScreen.classList.add(`intro-screen--closing`);
+                window.setTimeout(() => introScreen.remove(), 520);
+            }
+
+            introSkip.addEventListener(`click`, closeIntro);
+            const introDuration = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches ? 100 : 3300;
+            window.setTimeout(closeIntro, introDuration);
 
             const bottleData = {
                 original: {
